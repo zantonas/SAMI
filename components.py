@@ -3,7 +3,7 @@ import json
 
 
 class Page():
-	name = ""
+	name = "Dashboard"
 	headerp1 = """
 		<html>
 		<head>
@@ -38,23 +38,17 @@ class Page():
 		
 	navigation = None
 	
-	def __init__(self, name):
-		self.name = name
+	def __init__(self):
 		self.navigation = Navigation()
-		if self.name +'.cgi' in self.navigation.scriptmap:
-			self.name = self.navigation.scriptmap[self.name+'.cgi']
-		elif self.name != '':
-			self.name = "ERROR 404"
 		self.print_self()
 		
 		
 	def print_self(self):
-
 		print self.headerp1 + self.name + self.headerp2
 		self.navigation.print_self()
 		print self.pageheaderp1 + self.name + self.pageheaderp2
 		print "You are currently browsing the verified " + self.name + " page."
-		print content
+		print self.content
 		print self.footer
 		
 		
