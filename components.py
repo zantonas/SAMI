@@ -44,6 +44,7 @@ class Page():
 		
 		
 	def print_self(self):
+		print "Content-type: text/html\n\n"
 		print self.headerp1 + self.name + self.headerp2
 		self.navigation.print_self()
 		print self.pageheaderp1 + self.name + self.pageheaderp2
@@ -61,7 +62,7 @@ class Navigation():
 		self.navhtml = """
 		<div class=\"navigation\">
 		<div class="logo">
-			<img src=\"./openstack.jpg\" /></br>
+			<a href="/"><img src=\"./openstack.jpg\" /></a></br>
 			Swift Interface
 		</div>
 		"""
@@ -75,7 +76,7 @@ class Navigation():
 			"""+cat['name']+"</div>"
 			i = 0
 			for page in cat['pages']:
-				self.navhtml += "<div class=\"entry\"><a href=\""+page['script'].split('.')[0]+"\">"+page['name']+"</a></div>"
+				self.navhtml += "<div class=\"entry\"><a href=\""+page['script']+"\">"+page['name']+"</a></div>"
 				self.scriptmap[page['script']] = page['name']
 			self.navhtml += "</div>"
 				
