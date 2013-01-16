@@ -27,7 +27,7 @@ print "Total bytes " + total_bytes
 body = conn.get_account()
 
 for x in range(int (total_containers)):
-  cont_inf = body[1][x]
+  	cont_inf = body[1][x]
 	cont_values = cont_inf.values()
 	print "---------------------------------------"
 	print "   Container: " + cont_values[2]
