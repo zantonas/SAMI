@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from components import Page
 from swiftclient import Connection
 
@@ -6,8 +7,6 @@ class Lcap(Page):
 	name = "Logical Capacity"
 	
 	def __init__(self):
-		Page.__init__(self)
-	
 
 		user_name="tester"
 		account_name="test"
@@ -22,26 +21,28 @@ class Lcap(Page):
 		total_objects = headers.get('x-account-object-count', 0)
 		total_bytes = headers.get('x-account-bytes-used', 0)
 
-
-		print "======================================="
-		print "Tenant: " + account_name
-		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-		print "Total containers " + total_containers
-		print "Total objects " + total_objects
-		print "Total bytes " + total_bytes
-
+		self.content += "<br/> ======================================="
+		self.content += "<br/> Tenant: " + account_name
+		self.content += "<br/> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+		self.content += "<br/> Total containers " + total_containers
+		self.content += "<br/> Total objects " + total_objects
+		self.content += "<br/> Total bytes " + total_bytes
 
 		body = conn.get_account()
 
-		for x in range(int (total_containers)):
-  			cont_inf = body[1][x]
-			cont_values = cont_inf.values()
-			print "---------------------------------------"
-			print "   Container: " + cont_values[2]
-			print "---------------------------------------"
-			print "   Total objects " + str (cont_values[0])
-			print "   Total bytes " + str (cont_values[1])
+		self.content += "<table><tbody>"
 
-		print "======================================="
-	
+	        for x in range(int (total_containers)):
+                        cont_inf = body[1][x]
+                        cont_values = cont_inf.values()
+                        self.content += "<tr>"
+                        self.content += "<th scope='row'> Container: " + cont_values[2] + " Total objects: " + str (cont_values[0]) + " Total bytes: " + str (cont_values[1]) + "</th>"
+                        self.content += "<td>" + str (cont_values[0]) + "</td>"
+			self.content += "</tr>"
+		self.content += "</tbody></table>"
+		
+		self.content += "<div id='containers'></div>"
+
+		Page.__init__(self)
 page = Lcap()
+

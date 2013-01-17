@@ -7,7 +7,7 @@ class Pcap(Page):
 	name = "Physical Capacity"
 	
 	def __init__(self):
-		#self.establishConnection()
+	        self.establishConnection()
 		Page.__init__(self)
 		
 		#print "hey"

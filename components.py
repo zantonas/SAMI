@@ -1,13 +1,21 @@
 #!/usr/bin/env python
 import json
 
-
 class Page():
 	name = "Dashboard"
 	headerp1 = """
 		<html>
 		<head>
-		<title>Swift Interface: """ 
+	
+	 	<link rel="stylesheet" href="pie.css"media="screen">
+
+		<script src="/swift-management-interface/jquery-1.9.0.min.js"></script>
+		<script src="/swift-management-interface/raphael-min.js"></script>
+		<script src="/swift-management-interface/container-pie.js"></script>
+
+		<style media="screen"> 	#holder {     margin: -350px 0 0 -350px;  width: 700px; height: 700px;}</style>
+
+		<title>Swift Interface: """
 
 	headerp2 ="""
 		</title>
