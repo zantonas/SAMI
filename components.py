@@ -6,23 +6,22 @@ class Page():
 	headerp1 = """
 		<html>
 		<head>
-	
 	 	<link rel="stylesheet" href="pie.css"media="screen">
-
-		<script src="/swift-management-interface/jquery-1.9.0.min.js"></script>
-		<script src="/swift-management-interface/raphael-min.js"></script>
-		<script src="/swift-management-interface/container-pie.js"></script>
-
-		<style media="screen"> 	#holder {     margin: -350px 0 0 -350px;  width: 700px; height: 700px;}</style>
-
-		<title>Swift Interface: """
-
-	headerp2 ="""
+		<title>Swift Interface: 
+		"""
+	
+	headerp2 = """
 		</title>
 		<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />
+		"""
+	
+	headerresources = ""
+	
+	headerp3 = """
 		</head>
 		<body>
 		"""
+	
 	
 	pageheaderp1 = """
 		<div class=\"main\">
@@ -53,10 +52,9 @@ class Page():
 		
 	def print_self(self):
 		print "Content-type: text/html\n\n"
-		print self.headerp1 + self.name + self.headerp2
+		print self.headerp1 + self.name + self.headerp2 + self.headerresources + self.headerp3
 		self.navigation.print_self()
 		print self.pageheaderp1 + self.name + self.pageheaderp2
-		print "You are currently browsing the verified " + self.name + " page."
 		print self.content
 		print self.footer
 		

@@ -7,7 +7,24 @@ class Lcap(Page):
 	name = "Logical Capacity"
 	
 	def __init__(self):
+		self.headerresources += """
+			<script src="/js/jquery-1.9.0.min.js"></script>
+			<script src="/js/raphael-min.js"></script>
+			<script src="/js/container-pie.js"></script>
 
+			<style media="screen"> 	#holder {     margin: -350px 0 0 -350px;  width: 700px; height: 700px;}</style>
+			"""
+		self.generate_pies()
+		Page.__init__(self)
+		
+	def generate_pies(self):
+		
+		self.content += "<div class='piestrip'>"
+		self.content += "<div id='pie1' class='piechart'></div>"
+		self.content += "<div id='pie2' class='piechart'></div>"
+		self.content += "<div id='pie3' class='piechart'></div>"
+		self.content += "</div>"
+		
 		user_name="tester"
 		account_name="test"
 		password="testing"
@@ -36,13 +53,11 @@ class Lcap(Page):
                         cont_inf = body[1][x]
                         cont_values = cont_inf.values()
                         self.content += "<tr>"
-                        self.content += "<th scope='row'> Container: " + cont_values[2] + " Total objects: " + str (cont_values[0]) + " Total bytes: " + str (cont_values[1]) + "</th>"
+                        self.content += "<th scope='row'> " + cont_values[2] + "\nTotal objects: " + str (cont_values[0]) + "\nTotal bytes: " + str (cont_values[1]) + "</th>"
                         self.content += "<td>" + str (cont_values[0]) + "</td>"
 			self.content += "</tr>"
 		self.content += "</tbody></table>"
-		
-		self.content += "<div id='containers'></div>"
 
-		Page.__init__(self)
+		
 page = Lcap()
 

@@ -102,3 +102,12 @@ font-weight: bold;
 		font-weight: bold;
 }
 
+.piechart {
+	float:left;
+	margin: 5px;
+}
+
+.piestrip {
+	min-width: 900px;
+}
+
