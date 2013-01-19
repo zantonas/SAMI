@@ -48,14 +48,19 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
     return chart;
 };
 
+$(document).ready(function() {
+	$('#maintable').dataTable();
+} );
+
 $(function () {
     var values = [],
         labels = [];
-    $("tr").each(function () {
+
+    $("#datatable tr").each(function () {
         values.push(parseInt($("td", this).text(), 10));
         labels.push($("th", this).html());
     });
-    $("table").hide();
+    $("#datatable").hide();
     Raphael("pie1", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
 	Raphael("pie2", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
 	Raphael("pie3", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");

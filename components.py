@@ -38,6 +38,7 @@ class Page():
 	content = ""
 		
 	footer = """
+		<div class="footer"></div>
 		</div>
 		</body>
 		</html>
