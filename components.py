@@ -52,7 +52,7 @@ class Page():
 		if self.auth_check():
 			print "\n"
 		else:
-			print "Location: /login.cgi"
+			print "Location: login.cgi"
 		self.navigation = Navigation()
 		self.print_self()
 		
