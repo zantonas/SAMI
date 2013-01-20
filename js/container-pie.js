@@ -48,6 +48,24 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
     return chart;
 };
 
+Raphael.fn.pieChartCircle = function (cx, cy, r, label, stroke) {
+	var paper = this,
+	chart = this.set(),
+	circle = paper.circle(cx,cy,r,label,stroke),
+	color = Raphael.hsb(0.4, .75, 1),
+	bcolor = Raphael.hsb(0.4, 1, 0.7);
+	circle.attr({fill: "90-" + bcolor + "-" + color, stroke: stroke, "stroke-width": 3, title: label});
+	circle.mouseover(function () {
+		circle.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, 500, "elastic");
+	}).mouseout(function () {
+		circle.stop().animate({transform: ""}, 500, "elastic");
+	});
+	
+	chart.push(circle);
+	return chart;
+}
+
+
 $(document).ready(function() {
 	$('#maintable').dataTable();
 } );
@@ -55,13 +73,36 @@ $(document).ready(function() {
 $(function () {
     var values = [],
         labels = [];
-
+		
+	$("#tenantdatatable tr").each(function () {
+        values.push(parseInt($("td", this).text(), 10));
+        labels.push($("th", this).html());
+    });
+	$("#tenantdatatable tr").hide();
+	if(values.length > 1) {
+		Raphael("pie1", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
+	} else {
+		Raphael("pie1", 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff");
+	}
+		
+	if(values.length > 1) {
+		Raphael("pie3", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
+	} else {
+		Raphael("pie3", 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff");
+	}
+	
+	values = [];
+    labels = [];
     $("#datatable tr").each(function () {
         values.push(parseInt($("td", this).text(), 10));
         labels.push($("th", this).html());
     });
     $("#datatable").hide();
-    Raphael("pie1", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
-	Raphael("pie2", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
-	Raphael("pie3", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
+	if(values.length > 1) {
+		Raphael("pie2", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
+	} else {
+		Raphael("pie2", 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff");
+	}
+
+	
 });

@@ -54,6 +54,11 @@ class Lcap(Page):
 		self.content += '<br/> Total containers ' + total_containers
 		self.content += '<br/> Total objects ' + total_objects
 		self.content += '<br/> Total bytes ' + total_bytes
+		
+		self.content += '<table id="tenantdatatable"><tbody>'
+		self.content += '<tr><th scope"row">' + account_name + '\nTotal containers: ' + total_containers + '\nTotal objects: ' + total_objects + '\nTotal bytes: ' + total_bytes + '</th>'
+		self.content += '<td>' + total_bytes + '</td>'
+		self.content += '</tr></tbody></table>'
 
 		body = conn.get_account()
 

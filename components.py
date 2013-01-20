@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import Cookie, datetime, random, os
 import json
 
 class Page():
@@ -47,17 +48,32 @@ class Page():
 	navigation = None
 	
 	def __init__(self):
+		print "Content-type: text/html"
+		if self.auth_check():
+			print "\n"
+		else:
+			print "Location: /login.cgi"
 		self.navigation = Navigation()
 		self.print_self()
 		
 		
 	def print_self(self):
-		print "Content-type: text/html\n\n"
 		print self.headerp1 + self.name + self.headerp2 + self.headerresources + self.headerp3
 		self.navigation.print_self()
 		print self.pageheaderp1 + self.name + self.pageheaderp2
 		print self.content
 		print self.footer
+	
+	def auth_check(self):
+		if "HTTP_COOKIE" in os.environ:
+			try:
+				cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])["session"].value
+				if cookie == "swiftpassword":
+					return True
+				else:
+					return False
+			except (Cookie.CookieError, KeyError):
+				return False
 		
 		
 
