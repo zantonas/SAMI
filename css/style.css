@@ -101,25 +101,47 @@ font-weight: bold;
 		font-weight: bold;
 }
 
-.piechart {
-	float:left;
-	margin: 5px;
+
+
+#pie1 {
+float: left;
+}
+
+#pie2 {
+text-align: center;
+}
+#pie3 {
+float: right;
 }
 
 .piestrip {
-	min-width: 900px;
-	clear: both;
-	width:100%;
-	margin-lefT: auto;
-	margin-right: auto;
+	min-width:780px;
+	width: 100%;
+	border-color: #E6E6E6;
+	border-style: solid;
+	overflow: hidden;
 }
 
 .footer {
 	
 }
 
+#tables {
+margin: 5px;
+	width:100%
+}
 
 #maintable {
 	width:700px;
+}
+
+#lefttable {
+    width:50%;
+	float:left;
+}
+#righttable {
+    width:50%;
+    float:left;
+
 }
 

@@ -7,13 +7,12 @@ class Page():
 	headerp1 = """
 		<html>
 		<head>
-	 	<link rel="stylesheet" href="pie.css"media="screen">
 		<title>Swift Interface: 
 		"""
 	
 	headerp2 = """
 		</title>
-		<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
 		"""
 	
 	headerresources = ""

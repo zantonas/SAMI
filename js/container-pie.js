@@ -80,7 +80,8 @@ Raphael.fn.pieChartEmpty = function (cx, cy, r, titletext) {
 
 
 $(document).ready(function() {
-	$('#maintable').dataTable();
+	$('#tenanttable').dataTable({"sPaginationType": "full_numbers"});
+	$('#containertable').dataTable({"sPaginationType": "full_numbers"});
 } );
 
 $(function () {
@@ -88,8 +89,8 @@ $(function () {
 	
 	var pies = [
 		{"holder":"pie1","datatable":"#tenantdatatable","title":"Tenant Pie"},
-		{"holder":"pie2","datatable":"#datatable","title":"Container Pie"},
-		{"holder":"pie3","datatable":"#tenantdatatable","title":"Tenant Pie"}
+		{"holder":"pie3","datatable":"#datatable","title":"Container Pie"},
+		{"holder":"pie2","datatable":"#tenantdatatable","title":"System Pie"}
 	];
 	
 	$.each(pies, function(key, pie) {
