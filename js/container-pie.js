@@ -1,7 +1,9 @@
-Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
+Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke, total, titletext) {
     var paper = this,
         rad = Math.PI / 180,
-        chart = this.set();
+        chart = this.set(),
+		title = paper.text(cx,10,titletext);
+		chart.push(title);
     function sector(cx, cy, r, startAngle, endAngle, params) {
         var x1 = cx + r * Math.cos(-startAngle * rad),
             x2 = cx + r * Math.cos(-endAngle * rad),
@@ -10,7 +12,6 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
         return paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "z"]).attr(params);
     }
     var angle = 0,
-        total = 0,
         start = 0.4,
         process = function (j) {
             var value = values[j],
@@ -39,21 +40,20 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
 			
             start += .1;
         };
-    for (var i = 0, ii = values.length; i < ii; i++) {
-        total += values[i];
-    }
-    for (i = 0; i < ii; i++) {
+    for (i = 0; i < values.length; i++) {
         process(i);
     }
     return chart;
 };
 
-Raphael.fn.pieChartCircle = function (cx, cy, r, label, stroke) {
+Raphael.fn.pieChartCircle = function (cx, cy, r, label, stroke, titletext) {
 	var paper = this,
 	chart = this.set(),
 	circle = paper.circle(cx,cy,r,label,stroke),
 	color = Raphael.hsb(0.4, .75, 1),
-	bcolor = Raphael.hsb(0.4, 1, 0.7);
+	bcolor = Raphael.hsb(0.4, 1, 0.7),
+	title = paper.text(cx,10,titletext);
+	chart.push(title);
 	circle.attr({fill: "90-" + bcolor + "-" + color, stroke: stroke, "stroke-width": 3, title: label});
 	circle.mouseover(function () {
 		circle.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, 500, "elastic");
@@ -65,44 +65,58 @@ Raphael.fn.pieChartCircle = function (cx, cy, r, label, stroke) {
 	return chart;
 }
 
+Raphael.fn.pieChartEmpty = function (cx, cy, r, titletext) {
+	var paper = this,
+	chart = this.set(),
+	circle = paper.circle(cx,cy,r, "", "#fff"),
+	text = paper.text(cx,cy,"No data"),
+	title = paper.text(cx,10,titletext);
+	chart.push(title);
+	circle.attr({fill: "#CFCFCF", stroke: "#fff"});
+	chart.push(circle);
+	chart.push(text);
+	return chart;
+}
+
 
 $(document).ready(function() {
-	$('#maintable').dataTable();
+	$('#tenanttable').dataTable({"sPaginationType": "full_numbers"});
+	$('#containertable').dataTable({"sPaginationType": "full_numbers"});
 } );
 
 $(function () {
-    var values = [],
-        labels = [];
-		
-	$("#tenantdatatable tr").each(function () {
-        values.push(parseInt($("td", this).text(), 10));
-        labels.push($("th", this).html());
-    });
-	$("#tenantdatatable tr").hide();
-	if(values.length > 1) {
-		Raphael("pie1", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
-	} else {
-		Raphael("pie1", 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff");
-	}
-		
-	if(values.length > 1) {
-		Raphael("pie3", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
-	} else {
-		Raphael("pie3", 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff");
-	}
-	
-	values = [];
-    labels = [];
-    $("#datatable tr").each(function () {
-        values.push(parseInt($("td", this).text(), 10));
-        labels.push($("th", this).html());
-    });
-    $("#datatable").hide();
-	if(values.length > 1) {
-		Raphael("pie2", 250, 250).pieChart(125, 125, 100, values, labels, "#fff");
-	} else {
-		Raphael("pie2", 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff");
-	}
 
+	
+	var pies = [
+		{"holder":"pie1","datatable":"#tenantdatatable","title":"Tenant Pie"},
+		{"holder":"pie3","datatable":"#datatable","title":"Container Pie"},
+		{"holder":"pie2","datatable":"#tenantdatatable","title":"System Pie"}
+	];
+	
+	$.each(pies, function(key, pie) {
+	    var values = [],
+			labels = [],
+			total = 0,
+			holder = pie.holder,
+			datatable= pie.datatable,
+			title= pie.title;
+
+		$(datatable + " tr").each(function () {
+			val = parseInt($("td", this).text(), 10);
+			values.push(val);
+			total += val;
+			labels.push($("th", this).html());
+		});
+		$(datatable).hide();
+		if(values.length > 1) {
+			if(total > 0) {
+				Raphael(holder, 250, 250).pieChart(125, 125, 100, values, labels, "#fff", total, title);
+			} else {
+				Raphael(holder, 250, 250).pieChartEmpty(125,125,100, title);
+			}
+		} else {
+			Raphael(holder, 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff", total, title);
+		}
+	});
 	
 });
