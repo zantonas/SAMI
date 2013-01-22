@@ -32,16 +32,49 @@ print """
 	<html>
 	<head>
 	<title>Swift Interface: Login</title>
+	<style type="text/css">
+		html, body{
+			padding: 0px;
+			margin: 0px;
+			font-family: Arial;
+			font-weight:bold;
+		}
+		form {
+			width:300px;
+			padding: 20px;
+			position: absolute;
+			margin:-150px 0 0 -150px;
+			text-align: center;
+			top: 50%;
+			left: 50%;
+			border-style: solid;
+			border-color: #888888;
+			box-shadow: 10px 10px 5px #888888;
+		}
+
+		
+	</style>
 	</head>
 	<body>
 	"""
 
-print "Please log in"
 print """
 	<form method="post" action="login.cgi">
-	<input id="user" name="user" type="textbox"></input>
-	<input name="password" type="textbox"></input>
-	<input name="submit" type="submit" value="Login"/>
+		<table>
+			<thead>Please Log in</thead>
+			<tbody>
+				<tr>
+					<td>Username: </td><td><input id="user" name="user" type="textbox"></input></td>
+				</tr>
+				<tr>
+					<td>Password: </td><td><input name="password" type="password"></input></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input name="submit" type="submit" value="Login"/></td>
+				</tr>
+			</tbody>
+		</table>
 	</form>
 	"""
 	
