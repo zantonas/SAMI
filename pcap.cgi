@@ -8,8 +8,8 @@ class Pcap(Page):
 	name = "Physical Capacity"
 
 	def __init__(self):
-		self.addContent(str(self.fetchDrives(1)))
-		self.addContent(str(self.fetchAllDriveUsage()))
+		zDrives = self.fetchAllDrives()
+		self.addContent(str(zDrives[1]))
 		Page.__init__(self)
 	
 	def addContent(self, text):
@@ -46,7 +46,7 @@ class Pcap(Page):
 				zoned_devs[iDev['zone']].append(iDev)
 			else:
 				zoned_devs[iDev['zone']] = [iDev]
-		self.addContent("<br/>" + str(zoned_devs[1]) );
+		return zoned_devs
 					 
 	def fetchAllDriveUsage(self):
 		pass
