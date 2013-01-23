@@ -9,11 +9,8 @@ class Pcap(Page):
 
 	def __init__(self):
 		zDrives = self.fetchAllDrives()
-		self.addContent(str(zDrives[1]))
 		Page.__init__(self)
-	
-	def addContent(self, text):
-		self.content += "\n" + text
+			
 
 	def fetchDrives(self, zone):
 		iZone = int(zone) #Is this how casting shit works?
