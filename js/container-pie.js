@@ -81,25 +81,23 @@ Raphael.fn.pieChartEmpty = function (cx, cy, r, titletext) {
 	
 function createPie(key, pie) {
 	var values = [],
-		labels = [],
+		labels = (typeof pie["labels"] != 'undefined' ? pie["labels"] : []),
 		total = 0,
 		holder = pie["holder"],
 		datatable= pie["datatable"],
 		title= pie["title"];
-		
-	$(datatable + " thead td").each(function () {
-		
-	});
 
 	$(datatable + " tbody tr").each(function () {
 		val = parseInt($(this).children("td").last().text(), 10);
 		values.push(val);
 		total += val;
+		
 		label = ""
 		$(this).children("td").each(function (index) {
 			label += $(datatable + " thead th").eq(index).html() + ": " + $(this).html() + "\n";
 		});
 		labels.push(label);
+		
 	});
 
 	if(values.length > 1) {

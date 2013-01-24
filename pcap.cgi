@@ -74,12 +74,12 @@ class Pcap(Page):
 						});
 						if(index != 0) { $(this).children("#table").hide();  $(this).children(".expander").text("+");}
 					});
-					$('table').dataTable({"sPaginationType": "full_numbers"});
+					$('table#zonetable').each(function() {$(this).dataTable({"sPaginationType": "full_numbers"})});
 					
 					var pies = [
-						{"holder":"pie1","datatable":"#tenanttable","title":"System Capacity"},
+						{"holder":"pie1","datatable":"#systemtable","title":"System Capacity", "labels":["Free","Used"]},
 						{"holder":"pie3","datatable":"#zonetable","title":"Disk Capacity"},
-						{"holder":"pie2","datatable":"#tenanttable","title":"Zone Capacity"}
+						{"holder":"pie2","datatable":"#zonetotalttable","title":"Zone Capacity", "labels":["Zone 1","Zone 2", "Zone 3", "Zone 4"]}
 					];
 					
 					$.each(pies, createPie);
@@ -97,6 +97,15 @@ class Pcap(Page):
 	
 	def generate_tables(self):
 		zoned_devs = self.fetchAllDrives()
+		total_capacity = 0
+		total_used = 0
+		zonetotaltable = """
+			<table id="zonetotaltable" style="display:none;" >
+				<thead><tr>
+					<th>zone</th>
+				</tr></thead>
+				<tbody>
+			"""
 		for zone in zoned_devs:
 			self.addContent("<div class=\"zone\">")
 			self.addContent("<h2 class=\"expander unselectable\" >-</h2><h2 class=\"unselectable\">Zone " + str(zone) + "</h2>")
@@ -111,16 +120,40 @@ class Pcap(Page):
 					</tr></thead>
 				<tbody>
 				""");
+			total_zone_capacity = 0
 			for device in zoned_devs[zone]:
 				self.addContent("""
 					<tr>
 						<td>"""+device["ip"]+"/"+device["device"]+"""</td>
-						<td>TBD</td>
-						<td>TBD</td>
-						<td>TBD</td>
+						<td>"""+str(device["used"])+"""</td>
+						<td>"""+str(device["size"]-device["used"])+"""</td>
+						<td>"""+str(device["size"])+"""</td>
 					</tr>""");
+				total_zone_capacity += device["size"]
+				total_capacity += device["size"]
+				total_used += device["used"]
 			self.addContent("</tbody></table></div></div>")
+			zonetotaltable += "<tr><td>"+str(total_zone_capacity)+"</td></tr>"
 			
+		zonetotaltable += """
+					</tbody>
+				</table>
+				"""
+		
+		self.addContent("""
+				<table id="systemtable" style="display:none;" >
+					<thead><tr>
+						<th></th>
+					</tr></thead>
+					<tbody>
+						<tr><td>"""+str(total_used)+"""</td></tr>
+						<tr><td>"""+str(total_capacity - total_used)+"""</td></tr>
+					</tbody>
+				</table>
+				""");
+		
+		self.addContent(zonetotaltable)
+		
 	def fetchDrives(self, zone):
 		iZone = int(zone) #Is this how casting shit works?
 		conf = {}
