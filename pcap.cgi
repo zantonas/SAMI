@@ -8,6 +8,12 @@ class Pcap(Page):
 	name = "Physical Capacity"
 
 	def __init__(self):
+		self.generate_header()
+		self.generate_pies()
+		self.generate_tables()
+		Page.__init__(self)
+		
+	def generate_header(self):
 		self.headerresources += '''
 			<script src="/js/jquery-1.9.0.min.js"></script>
 			<script src="/js/raphael-min.js"></script>
@@ -59,17 +65,14 @@ class Pcap(Page):
 				} );
 			</script>
 			'''
-			
-		self.generate_pies()
-		self.generate_tables()
-		Page.__init__(self)
 	
 	def generate_pies(self):
-		self.content += '<div class="piestrip">\n'
-		self.content += '<div id="pie3" class="piechart"></div>\n'
-		self.content += '<div id="pie1" class="piechart"></div>\n'
-		self.content += '<div id="pie2" class="piechart"></div>\n'
-		self.content += '</div>\n'
+		self.addContent('''
+			<div class="piestrip">
+				<div id="pie3" class="piechart"></div>
+				<div id="pie1" class="piechart"></div>
+				<div id="pie2" class="piechart"></div>
+			</div>''');
 	
 	def generate_tables(self):
 		zoned_devs = self.fetchAllDrives()
