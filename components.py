@@ -54,7 +54,9 @@ class Page():
 			print "Location: login.cgi"
 		self.navigation = Navigation()
 		self.print_self()
-		
+	
+	def addContent(self, text):
+		self.content += text
 		
 	def print_self(self):
 		print self.headerp1 + self.name + self.headerp2 + self.headerresources + self.headerp3
