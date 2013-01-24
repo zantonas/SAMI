@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from components import Page
+from reconWrapping import CallRecon
 from swiftclient import Connection
 from swift.common.ring.ring import Ring
 from swift.common.ring.ring import RingData
@@ -8,9 +9,19 @@ class Pcap(Page):
 	name = "Physical Capacity"
 
 	def __init__(self):
+		recon = CallRecon('192.168.1.121', '6010').establishConnection()
 		zDrives = self.fetchAllDrives()
+		for zone in zDrives:
+			self.addContent("<br/>Zone: " + str(zDrives[zone][0]['zone']))
+			for device in zDrives[zone]:
+				self.addContent("<br/> Device " + str(device['device']))
+				recon = CallRecon(device['ip'], device['port']).establishConnection()
+				self.addContent(" " + recon)
+				self.addContent(device['ip'] + " " + str(device['port']))
 		Page.__init__(self)
-			
+	
+	def addContent(self, text):
+		self.content += "\n" + text		
 
 	def fetchDrives(self, zone):
 		iZone = int(zone) #Is this how casting shit works?
