@@ -4,25 +4,37 @@ from reconWrapping import CallRecon
 from swiftclient import Connection
 from swift.common.ring.ring import Ring
 from swift.common.ring.ring import RingData
+import json
 
 class Pcap(Page):
 	name = "Physical Capacity"
 
 	def __init__(self):
-		self.addContent("")
-		#recon = CallRecon('192.168.1.121', '6010').establishConnection()
-		#zDrives = self.fetchAllDrives()
-		#for zone in zDrives:
-		#	self.addContent("<br/>Zone: " + str(zDrives[zone][0]['zone']))
-		#	for device in zDrives[zone]:
-		#		self.addContent("<br/> Device " + str(device['device']))
-		#		recon = CallRecon(device['ip'], device['port']).establishConnection()
-		#		self.addContent(" " + recon)
-		#		self.addContent(device['ip'] + " " + str(device['port']))
+		#self.testZoneThings()
+		self.generate_header()
+		self.generate_pies()
+		self.generate_tables()
 		Page.__init__(self)
 	
-	def addContent(self, text):
-		self.content += "\n" + text		
+	def testZoneThings(self):
+		recon = CallRecon('192.168.1.121', '6010').establishConnection()
+                zDrives = self.fetchAllDrives()
+                reconData = {}
+		for zone in zDrives:
+                        self.addContent("<br/>Zone: " + str(zDrives[zone][0]['zone']))
+                        for device in zDrives[zone]:
+                                #self.addContent("<br/> Device " + str(device['device']))
+				if device['ip'] not in reconData:
+                                	reconData[device['ip']] = json.loads(CallRecon(device['ip'], device['port']).establishConnection())
+				for reconDevice in reconData:
+					#self.addContent("<br/>" + str(reconData[reconDevice]))
+					for dev in reconData[reconDevice]:
+						if dev['device'] == device['device']:
+							device['used'] = dev['used']
+							device['size'] = dev['size']
+		return reconData	
+
+	def generate_header(self):
 		self.headerresources += '''
 			<script src="/js/jquery-1.9.0.min.js"></script>
 			<script src="/js/raphael-min.js"></script>
@@ -74,17 +86,14 @@ class Pcap(Page):
 				} );
 			</script>
 			'''
-			
-		self.generate_pies()
-		self.generate_tables()
-		Page.__init__(self)
 	
 	def generate_pies(self):
-		self.content += '<div class="piestrip">\n'
-		self.content += '<div id="pie3" class="piechart"></div>\n'
-		self.content += '<div id="pie1" class="piechart"></div>\n'
-		self.content += '<div id="pie2" class="piechart"></div>\n'
-		self.content += '</div>\n'
+		self.addContent('''
+			<div class="piestrip">
+				<div id="pie3" class="piechart"></div>
+				<div id="pie1" class="piechart"></div>
+				<div id="pie2" class="piechart"></div>
+			</div>''');
 	
 	def generate_tables(self):
 		zoned_devs = self.fetchAllDrives()
@@ -136,11 +145,19 @@ class Pcap(Page):
 		self.object_ring = Ring(swift_dir, ring_name='object')
 		device_list = self.object_ring.devs
 		zoned_devs = dict()
+		reconData = {}
 		for iDev in device_list[:]:
 			if iDev['zone'] in zoned_devs:
 				zoned_devs[iDev['zone']].append(iDev)
 			else:
 				zoned_devs[iDev['zone']] = [iDev]
+				if iDev['ip'] not in reconData:
+                                        reconData[iDev['ip']] = json.loads(CallRecon(iDev['ip'], iDev['port']).establishConnection())
+                                for reconDevice in reconData:
+                                        for dev in reconData[reconDevice]:
+                                                if dev['device'] == iDev['device']:
+                                                        iDev['used'] = dev['used']
+                                                        iDev['size'] = dev['size']
 		return zoned_devs
 					 
 	def fetchAllDriveUsage(self):
