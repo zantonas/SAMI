@@ -78,45 +78,37 @@ Raphael.fn.pieChartEmpty = function (cx, cy, r, titletext) {
 	return chart;
 }
 
-
-$(document).ready(function() {
-	$('#tenanttable').dataTable({"sPaginationType": "full_numbers"});
-	$('#containertable').dataTable({"sPaginationType": "full_numbers"});
-} );
-
-$(function () {
-
 	
-	var pies = [
-		{"holder":"pie1","datatable":"#tenantdatatable","title":"Tenant Pie"},
-		{"holder":"pie3","datatable":"#datatable","title":"Container Pie"},
-		{"holder":"pie2","datatable":"#tenantdatatable","title":"System Pie"}
-	];
-	
-	$.each(pies, function(key, pie) {
-	    var values = [],
-			labels = [],
-			total = 0,
-			holder = pie.holder,
-			datatable= pie.datatable,
-			title= pie.title;
-
-		$(datatable + " tr").each(function () {
-			val = parseInt($("td", this).text(), 10);
-			values.push(val);
-			total += val;
-			labels.push($("th", this).html());
-		});
-		$(datatable).hide();
-		if(values.length > 1) {
-			if(total > 0) {
-				Raphael(holder, 250, 250).pieChart(125, 125, 100, values, labels, "#fff", total, title);
-			} else {
-				Raphael(holder, 250, 250).pieChartEmpty(125,125,100, title);
-			}
-		} else {
-			Raphael(holder, 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff", total, title);
-		}
+function createPie(key, pie) {
+	var values = [],
+		labels = [],
+		total = 0,
+		holder = pie["holder"],
+		datatable= pie["datatable"],
+		title= pie["title"];
+		
+	$(datatable + " thead td").each(function () {
+		
 	});
-	
-});
+
+	$(datatable + " tbody tr").each(function () {
+		val = parseInt($(this).children("td").last().text(), 10);
+		values.push(val);
+		total += val;
+		label = ""
+		$(this).children("td").each(function (index) {
+			label += $(datatable + " thead th").eq(index).html() + ": " + $(this).html() + "\n";
+		});
+		labels.push(label);
+	});
+
+	if(values.length > 1) {
+		if(total > 0) {
+			Raphael(holder, 250, 250).pieChart(125, 125, 100, values, labels, "#fff", total, title);
+		} else {
+			Raphael(holder, 250, 250).pieChartEmpty(125,125,100, title);
+		}
+	} else {
+		Raphael(holder, 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff", title);
+	}
+}
