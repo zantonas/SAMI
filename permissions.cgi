@@ -59,22 +59,22 @@ class Permissions(Page):
 			if ten_valid == False:
           		      	self.addContent('Not a valid tenant_ID')###change this to make it spit out a list of tenants					
 			else:
-				grant_user_id = form.getvalue('grantuserid')
-				grant_role_id = form.getvalue('grantroleid')
-
-				if ((grant_user_id != None) and (grant_role_id != None)):
-					try:
-						keystone.tenants.add_user(tenant=tenant_id,user=grant_user_id,role=grant_role_id)
-					except:
-						pass
-				revoke_user_id = form.getvalue('revokeuserid')
-                                revoke_role_id = form.getvalue('revokeroleid')
-
-				if ((revoke_user_id != None) and (revoke_role_id != None)):
-                                        try:
-						keystone.tenants.remove_user(tenant=tenant_id,user=revoke_user_id,role=revoke_role_id)
-					except:
-						pass
+				permission = form.getvalue('permission')
+				permission_user_id = form.getvalue('permissionuserid')
+				permission_role_id = form.getvalue('permissionroleid')
+				
+				if ((permission_user_id != None) and (permission_role_id != None) and (permission != None)):
+					if permission == 'grant': 
+						try:
+							keystone.tenants.add_user(tenant=tenant_id,user=permission_user_id,role=permission_role_id)
+						except:
+							pass
+					elif permission == 'revoke':
+						try:
+							keystone.tenants.remove_user(tenant=tenant_id,user=permission_user_id,role=permission_role_id)
+						except:
+							pass
+				
 				userlist =  keystone.tenants.list_users(tenant=tenant_id)
 				
 				self.addContent('<table border="1"><tr><th>Name</th><th>ID</th><th>Email</th><th>Enabled</th><th>Roles</th></tr>')
@@ -97,23 +97,24 @@ class Permissions(Page):
 					self.addContent('</td>')
 		                self.addContent('</table>')
 	
-				self.addContent('<br><b>Grant permissions:</b><br>')
+				self.addContent('<br><b>Permissions:</b><br>')
                                 self.addContent('<form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
-                                self.addContent('''<b>User: </b><input type="text" name="grantuserid" />''')
-				self.addContent('<select name="grantroleid">')
+				self.addContent('<select name="permission"> <option value="grant"> grant </option> <option value="revoke"> revoke </option>')
+                                self.addContent('''<b>User: </b><input type="text" name="permissionuserid" />''')
+				self.addContent('<select name="permissionroleid">')
 				roles = keystone.roles.list()
 				for i in range(len(roles)):
 					self.addContent('<option value="' + roles[i].id +'">' + roles[i].name + '</option>')	
-				self.addContent('''<input type="submit" name="grantsubmit" /></form>''');
+				self.addContent('''<input type="submit" name="permissionsubmit" /></form>''');
 
 
-				self.addContent('<br><b>Revoke permissions:</b><br>')
-                                self.addContent('<form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
-                                self.addContent('''<b>User: </b><input type="text" name="revokeuserid" />''')
-                                self.addContent('<select name="revokeroleid">')
-                                for i in range(len(roles)):
-                                        self.addContent('<option value="' + roles[i].id +'">' + roles[i].name + '</option>')
-                                self.addContent('''<input type="submit" name="revokesubmit" /></form>''');
+				#self.addContent('<br><b>Revoke permissions:</b><br>')
+                                #self.addContent('<form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
+                                #self.addContent('''<b>User: </b><input type="text" name="revokeuserid" />''')
+                                #self.addContent('<select name="revokeroleid">')
+                                #for i in range(len(roles)):
+                                #        self.addContent('<option value="' + roles[i].id +'">' + roles[i].name + '</option>')
+                                #self.addContent('''<input type="submit" name="revokesubmit" /></form>''');
 
 
 Page = Permissions()
