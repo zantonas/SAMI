@@ -9,7 +9,6 @@ import json
 from keystoneclient.v2_0 import client
 
 class Lcap(Page):
-<<<<<<< HEAD
     name = 'Logical Capacity'
     
     def __init__(self):
