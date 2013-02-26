@@ -1,34 +1,55 @@
 #!/usr/bin/env python
-from components import Page
 import httplib
 import smtplib
+import json
+import ast
 from email.mime.text import MIMEText
 
-conn = httplib.HTTPConnection("127.0.0.1:6000")
-conn.request("GET", "/recon/unmounted")
-r1 = conn.getresponse()
-body = r1.read()	
+f = open("alerting.dat", "r")
+alerts = []
+for line in f:
+        alerts.append(line)
 
-if body == "[]":
-	print "No errors detected. Drives are OK."
+
+message = ''
+if (alerts[0] == '\n') and (alerts[1] == '{}'):
+        pass
 else:
-	#Creds
-	smtpuser = 'INSERT SENDER EMAIL HERE' 
-	smtppass = 'INSERT PASSWORD HERE' 
+        message+='Openstack Swift Alert!\n\n'
 
-	server = smtplib.SMTP('smtp.gmail.com',587)
-	recipients = ['INSERT RECIPIENT EMAIL', 'INSERT RECIPIENT EMAIL', 'INSERT RECIPIENT EMAIL']
-	msg = MIMEText("OpenStack Swift Alert! Drive errors detected!\nThe following drives have been automatically unmounted to avoid further issues: \n\n" + body)
-	msg['Subject'] = "OpenStack Swift Alert!"
-	msg['From'] = smtpuser
-	msg['To'] = ", ".join(recipients)
-	try:
-		server.ehlo()
-		server.starttls()
-		server.ehlo()
-		server.login(smtpuser, smtppass)
-		server.sendmail(smtpuser,recipients,msg.as_string())
-		server.close()
-		print "email sent."
-	except Exception:
-		print "email failed to send." 
+if alerts[0] != '\n':
+        unpingable_nodes = alerts[0].split(',')
+        message+='Node issues detected!\nThe following Nodes are unpingable:\n\n'
+        for ip in range(len(unpingable_nodes)):
+                message+= unpingable_nodes[ip] + '\n'
+if alerts[1] != '{}':
+        unmounted_drives  = ast.literal_eval(str(alerts[1]))
+        message+='\nDrive errors detected!\nThe following drives have been automatically unmounted to avoid further issues:\n\n'
+        for ip in unmounted_drives:
+                for x in range(len(unmounted_drives[ip])):
+                        message+= ip + ' --- ' + unmounted_drives[ip][x]['device'] + '\n'
+
+if message == '':
+        print "No errors detected. Cluster is OK"
+else:
+        print message
+        #Creds
+        smtpuser = '[INPUT_USER_EMAIL]'
+        smtppass = '[INPUT_USER_PASS]'
+
+        server = smtplib.SMTP('smtp.gmail.com',587)
+        recipients = ['[RECIPIENT_EMAIL]', '[RECIPIENT_EMAIL]']
+        msg = MIMEText(message)
+        msg['Subject'] = "OpenStack Swift Alert!"
+        msg['From'] = smtpuser
+        msg['To'] = ", ".join(recipients)
+        try:
+                server.ehlo()
+                server.starttls()
+                server.ehlo()
+                server.login(smtpuser, smtppass)
+                server.sendmail(smtpuser,recipients,msg.as_string())
+                server.close()
+                print "email sent."
+        except Exception:
+                print "email failed to send."
