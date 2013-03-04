@@ -24,34 +24,33 @@ class Lcap(Page):
                 
             $(function () {
                     
-                    $('#tenanttable').dataTable({"sPaginationType": "full_numbers"});
+					/* Add a click handler to the rows - this could be used as a callback */
+					$("#tenanttable tbody").click(function(event) {
+						$(oTable.fnSettings().aoData).each(function (){
+							$(this.nTr).removeClass('row_selected');
+						});
+						$(event.target.parentNode).addClass('row_selected');
+					});
+			
+                    oTable = $('#tenanttable').dataTable({"sPaginationType": "full_numbers"});
                     //$("#tenanttable table").each(function () {
                     //  $(this).dataTable({"sPaginationType": "full_numbers"});
                     //});
                     $('#containertable').dataTable({"sPaginationType": "full_numbers"});
                     
                     var pies = [
-                        {"holder":"pie1","datatable":"#tenanttable","title":"Tenant Pie"},
-                        {"holder":"pie3","datatable":"#containertable","title":"Container Pie"},
-                        {"holder":"pie2","datatable":"#tenanttable","title":"System Pie"}
+                        {"holder":"tenantpie","datatable":"#tenanttable","title":"Tenant Pie"},
+                        {"holder":"containerpie","datatable":"#containertable","title":"Container Pie"},
                     ];
                     
                     $.each(pies, createPie);
             } );
-
+			
             </script>
             '''
-        self.generate_pies()
         self.generate_tables()
         Page.__init__(self)
         
-    def generate_pies(self):
-        
-        self.addContent('<div class="piestrip">\n')
-        self.addContent('<div id="pie3" class="piechart"></div>\n')
-        self.addContent('<div id="pie1" class="piechart"></div>\n')
-
-        self.addContent('</div>\n');
     
     def generate_tables(self):
 
@@ -69,36 +68,26 @@ class Lcap(Page):
 
         self.addContent('<div id="tables">\n')
         self.addContent('''
-            <div id="lefttable">
+            <div id="tenantpie" class="logicalpie"></div>
+            <div class="datatable">
             <h2>Tenants</h2>
                 <table id="tenanttable" class="display">
                     <thead><tr>
                             <th>Tenant Name</th>
                                 <th># of Objs</th>
-                                <th>Used Capacity</th>
                                 <th>Total Containers</th>
+                                <th>Used Capacity</th>
             </tr></thead>
                         <tbody>
             ''')
                     
         form = cgi.FieldStorage()
-        account_name = form.getvalue('tenant')
-        
-        if account_name == None:
-            creds='demo' + ':' + user_name
-        else:
-            creds=account_name + ':' + user_name
-
-        conn = Connection(authurl=endpoint, user=creds, key=password, auth_version='2')
-
-        body = conn.get_account()   
-        
+        selected_account = form.getvalue('tenant')
         for i in range(len(tenlist)):
             
             account_name = tenlist[i].name
             creds=account_name + ':' + user_name
-            
-            
+
             conn = Connection(authurl=endpoint, user=creds, key=password, auth_version='2')
             
             headers = conn.head_account()
@@ -110,17 +99,18 @@ class Lcap(Page):
             total_objects = headers.get('x-account-object-count', 0)
             total_bytes = headers.get('x-account-bytes-used', 0)
             
-            self.addContent('<tr onclick=\"document.location =\'?tenant='+account_name+'\';\">')
+            self.addContent('<tr class="'+("row_selected" if (selected_account==account_name or (selected_account == None and i == 0)) else "")+'" onclick=\"document.location =\'?tenant='+account_name+'\';\">')
             self.addContent('<td>' + account_name + '</td>')
             self.addContent('<td>' + str (total_objects) + '</td>')
-            self.addContent('<td>' + str (total_bytes) + '</td>')
             self.addContent('<td>' + str (total_containers) + '</td>')
+            self.addContent('<td>' + str (total_bytes) + '</td>')
             self.addContent('</tr>')
-
-
+            if selected_account == None: selected_account = account_name
 
         self.addContent('</tbody></table></div>')
         self.addContent('''
+                        <div id="containerpie" class="logicalpie"></div>
+						<div class="datatable">
                         <h2>Containers</h2>
                         <table id="containertable" class="display">
                             <thead><tr>
@@ -130,6 +120,13 @@ class Lcap(Page):
                             </tr></thead>
                         <tbody>
                     ''')
+					
+
+        creds=selected_account + ':' + user_name
+
+        conn = Connection(authurl=endpoint, user=creds, key=password, auth_version='2')
+
+        body = conn.get_account()   
 
         for x in range(len (body[1])):
             cont_inf = body[1][x]
@@ -139,7 +136,7 @@ class Lcap(Page):
             self.addContent('<td>' + str (cont_values[0]) + '</td>')
             self.addContent('<td>' + str (cont_values[1]) + '</td>')
             self.addContent('</tr>')
-        self.addContent('</tbody></table>')   
+        self.addContent('</tbody></table></div>')   
 
     
 Page = Lcap()

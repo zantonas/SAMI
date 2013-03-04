@@ -9,7 +9,6 @@ body, html {
 }
 
 .navigation {
-	float: left;
 	width:20%;
 	max-width: 250px;
 	height: 100%;
@@ -17,48 +16,51 @@ body, html {
 	border-right-style: solid;
 	border-right-color: #E6E6E6;
 	background-color: #E6E6E6;
-	resize:horizontal;
+	padding-top: 150px;
+	float: left;
+	position: fixed;
 }
 .main {
-	width: auto;
 	height: 100%;
-	overflow: auto;
 }
 
 .header {
 	width: 100%;
+	min-width: 900px;
 	height: 150px;
-	position: relative;
 	background-color: #ffffff;
+	position: fixed;
+	z-index: 1;
+}
+
+.fakehead {
+	height: 150px;
 }
 
 .page {
 	padding: 10px;
-	width: auto;
 	background-color: #ffffff;
 	color: #000000;
-	position: relative;
+    position: relative;
+	margin-left: 250px;
 }
 
 
 .logo {
-	width: 100%;
+	width: 250px;
 	height: 150px;
 	vertical-align: middle;
 	text-align: center;
 	background-color: #ffffff;
-	position: relative;
+	float: left;
 }
 
 .systeminfo {
-	float: left;
-	width: 30%;
-	height: 100%;
-	display: block;
-	vertical-align: middle;
+	float: right;
+	height: 150px;
 	text-align: center;
-	margin-left: auto;   margin-right: auto;
 	background-color: #E6E6E6;
+	
 }
 
 .section {
@@ -89,13 +91,13 @@ font-weight: bold;
 
 #title { 
 	float: left;
-	width: 70%;
-	display: block;
+	width: 50%;
 	vertical-align: middle;
 	text-align: center;
 	margin-left: auto;   margin-right: auto;
-	margin-top: 120px;
-		font-weight: bold;
+	margin-top: 70px;
+	font-weight: bold;
+	font-size: 30px;
 }
 
 
@@ -111,6 +113,13 @@ text-align: center;
 float: right;
 }
 
+.logicalpie {
+float: left;
+border-color: #E6E6E6;
+border-style: solid;
+clear: left;
+}
+
 .piestrip {
 	min-width:780px;
 	width: 100%;
@@ -123,22 +132,25 @@ float: right;
 	
 }
 
+.datatable {
+	padding-left: 10px;
+	padding-bottom: 30px;
+	width: 70%;
+	min-width: 400px;
+	float: left;
+}
+
 #tables {
-margin: 5px;
-	width:100%
+	margin: 5px;
+	width:100%;
+	min-width: 900px;
 }
 
 #maintable {
 	width:700px;
 }
 
-#lefttable {
-    width:50%;
-	float:left;
-}
-#righttable {
-    width:50%;
-    float:left;
-
+table.dataTable td {
+	cursor: pointer;
 }
 
