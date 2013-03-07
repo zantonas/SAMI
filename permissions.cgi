@@ -17,10 +17,12 @@ class Permissions(Page):
 		
 	def generate_tables(self):
 
-		token = 'ADMIN'
-                endpoint = 'http://10.29.125.11:35357/v2.0/'
+		f = open("settings.dat", "r")
+        	settings = []
+        	for line in f:
+                	settings.append(line.split('\n')[0])
 
-                keystone = client.Client(token=token, endpoint=endpoint)
+                keystone = client.Client(token=settings[3], endpoint=settings[4])
 
 		###DEAL WITH POST FIRST
 		####################
