@@ -89,23 +89,21 @@ function createPie(key, pie) {
 
 	$(datatable + " tbody tr").each(function () {
 		val = parseInt($(this).children("td").last().text(), 10);
-		values.push(val);
+		if(val > 0) { values.push(val);
 		total += val;
 		
 		label = ""
 		$(this).children("td").each(function (index) {
-			label += $(datatable + " thead th").eq(index).html() + ": " + $(this).html() + "\n";
+			label += $(datatable + " thead th").eq(index).html() + " " + $(this).html() + "\n";
 		});
 		labels.push(label);
-		
+		}
 	});
 
 	if(values.length > 1) {
-		if(total > 0) {
-			Raphael(holder, 250, 250).pieChart(125, 125, 100, values, labels, "#fff", total, title);
-		} else {
-			Raphael(holder, 250, 250).pieChartEmpty(125,125,100, title);
-		}
+		
+		Raphael(holder, 250, 250).pieChart(125, 125, 100, values, labels, "#fff", total, title);
+		
 	} else {
 		Raphael(holder, 250, 250).pieChartCircle(125, 125, 100, labels[0], "#fff", title);
 	}

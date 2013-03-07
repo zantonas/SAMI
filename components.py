@@ -26,15 +26,24 @@ class Page():
 	pageheaderp1 = """
 		<div class=\"main\">
 		<div class=\"header\">
+		<div class="logo">
+			<a href="/"><img src=\"./openstack.jpg\" /></a></br>
+			SAMI
+		</div>
 		<div id="title">
 		"""
 	pageheaderp2 = """
 		</div>
-		<div class="systeminfo">System Info</div>
+		<div class="systeminfo">System Info<br/><br/>
+		Time: """+ datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S') + """
 		</div>
-		<div class=\"page\">
+		</div>
 		"""
 	
+	pageheaderp3 = """
+		<div class=\"fakehead\"></div>
+		<div class=\"page\">
+		"""
 	content = ""
 		
 	footer = """
@@ -60,8 +69,9 @@ class Page():
 		
 	def print_self(self):
 		print self.headerp1 + self.name + self.headerp2 + self.headerresources + self.headerp3
-		self.navigation.print_self()
 		print self.pageheaderp1 + self.name + self.pageheaderp2
+		self.navigation.print_self()
+		print self.pageheaderp3
 		print self.content
 		print self.footer
 	
@@ -85,10 +95,6 @@ class Navigation():
 	def __init__(self):
 		self.navhtml = """
 		<div class=\"navigation\">
-		<div class="logo">
-			<a href="/"><img src=\"./openstack.jpg\" /></a></br>
-			Swift Interface
-		</div>
 		"""
 		json_data = open('nav.conf')
 		data = json.load(json_data)
