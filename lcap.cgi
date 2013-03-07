@@ -54,14 +54,17 @@ class Lcap(Page):
     
     def generate_tables(self):
 
-        token = 'ADMIN'
-        endpoint = 'http://10.29.125.11:35357/v2.0/'
+	f = open("settings.dat", "r")
+	settings = []
+	for line in f:
+        	settings.append(line.split('\n')[0])
+	
 
-        keystone = client.Client(token=token, endpoint=endpoint)
+        keystone = client.Client(token=settings[3], endpoint=settings[4])
         tenlist =  keystone.tenants.list() # List tenantus
 
-        user_name='admin'
-        password='secrete'
+        user_name=settings[5]
+        password=settings[6]
         account_name=''     
         creds=account_name + ':' + user_name
         
@@ -88,7 +91,7 @@ class Lcap(Page):
             account_name = tenlist[i].name
             creds=account_name + ':' + user_name
 
-            conn = Connection(authurl=endpoint, user=creds, key=password, auth_version='2')
+            conn = Connection(authurl=settings[4], user=creds, key=password, auth_version='2')
             
             headers = conn.head_account()
             
@@ -124,7 +127,7 @@ class Lcap(Page):
 
         creds=selected_account + ':' + user_name
 
-        conn = Connection(authurl=endpoint, user=creds, key=password, auth_version='2')
+        conn = Connection(authurl=settings[4], user=creds, key=password, auth_version='2')
 
         headers, body = conn.get_account()   
 

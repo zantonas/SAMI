@@ -54,10 +54,12 @@ class Tenants(Page):
     
     def generate_tables(self):
 
-        token = 'ADMIN'
-        endpoint = 'http://10.29.125.11:35357/v2.0/'
+	f = open("settings.dat", "r")
+        settings = []
+        for line in f:
+                settings.append(line.split('\n')[0])
 
-        keystone = client.Client(token=token, endpoint=endpoint)
+        keystone = client.Client(token=settings[3], endpoint=settings[4])
 
         ###DEAL WITH POST FIRST
         ####################
@@ -128,12 +130,12 @@ class Tenants(Page):
                     break
             if ten_valid == True:
 
-                user_name='admin'
-                password='secrete'
+                user_name=settings[5]
+                password=settings[6]
                 account_name=tenant_name
                 creds=account_name + ':' + user_name
         
-                conn = Connection(authurl=endpoint, user=creds, key=password, auth_version='2')
+                conn = Connection(authurl=settings[4], user=creds, key=password, auth_version='2')
     
                 add_cont_name = form.getvalue("addcontname")            
                 if add_cont_name != None:

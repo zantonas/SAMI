@@ -5,6 +5,7 @@ import json
 import ast
 from swift.common.ring.ring import Ring
 from swift.common.ring.ring import RingData
+import os
 
 #FORMAT: [key=ip][port]
 diskips = dict()
@@ -89,6 +90,8 @@ for storagenode in diskips:
                 except:
                                 nodes_unpingable.append(storagenode)
 
+if not os.path.exists('/alerting.dat'):
+	os.makedirs('/alerting.dat')
 f = open('alerting.dat', 'w+')
 f.seek(0)
 f.write(','.join(nodes_unpingable) + '\n')
