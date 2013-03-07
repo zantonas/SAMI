@@ -110,13 +110,4 @@ class Permissions(Page):
 				self.addContent('''<input type="submit" name="permissionsubmit" /></form>''');
 
 
-				#self.addContent('<br><b>Revoke permissions:</b><br>')
-                                #self.addContent('<form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
-                                #self.addContent('''<b>User: </b><input type="text" name="revokeuserid" />''')
-                                #self.addContent('<select name="revokeroleid">')
-                                #for i in range(len(roles)):
-                                #        self.addContent('<option value="' + roles[i].id +'">' + roles[i].name + '</option>')
-                                #self.addContent('''<input type="submit" name="revokesubmit" /></form>''');
-
-
 Page = Permissions()

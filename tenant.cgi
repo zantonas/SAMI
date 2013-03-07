@@ -73,16 +73,24 @@ class Tenants(Page):
                         keystone.tenants.create(tenant_name=ten_name, description=desc)
                 else:
                         keystone.tenants.create(tenant_name=ten_name, description=desc, enabled=enable)
+      	
+		tenlist = keystone.tenants.list()
+       		add_ten_perm = ''
+      		for i in range(len(tenlist)):
+        	   	if ten_name == tenlist[i].name:
+               			add_ten_perm = tenlist[i].id
+               			break
+		keystone.tenants.add_user(tenant=add_ten_perm,user=settings[7],role=settings[8])
 
-        ten_id = form.getvalue("id")
+ 
+	ten_id = form.getvalue("deltensubmit")
         if ten_id != None:
                 keystone.tenants.delete(ten_id)
 
         ###################
-
+	tenant_id = form.getvalue('tenant')
         tenlist = keystone.tenants.list()
         
-        tenant_id = form.getvalue('tenant')
 
         if tenant_id == None:
             self.addContent('<table border="1"><tr><th>Name</th><th>ID</th><th>description</th><th>Enabled</th><th>Modify</th><th>Delete</th></tr>')
@@ -111,13 +119,6 @@ class Tenants(Page):
                         <input type="submit" name="addtensubmit" />
                         </form>''')
 
-                    #self.addContent('<b>Delete Tenant:</b><br>')
-                    #self.addContent('''<form action="tenant.cgi" method="post">
-                        #        <b>Tenant ID: </b><input type="text" name="id" />
-                        #        <input type="submit" name="deltensubmit" />
-                        #        </form>''');
-
- 
         else:
             tenlist = keystone.tenants.list()
             ten_valid = False
