@@ -107,9 +107,10 @@ class Pcap(Page):
 		
 		total_capacity = 0
 		total_used = 0
-		zonetotaltable = """
+		zonetotaltable = '''
+		<div class="datatable">
 			<h2>Zones</h2>
-			<table id="zonetotaltable">
+			<table id="zonetotaltable" class="display">
 				<thead><tr>
 					<th>Zone</th>
 					<th>Used</th>
@@ -117,7 +118,7 @@ class Pcap(Page):
 					<th>Total</th>
 				</tr></thead>
 				<tbody>
-			"""
+			'''
 			
 		form = cgi.FieldStorage()
 		selected_zone = form.getvalue('zone', "")
@@ -132,45 +133,47 @@ class Pcap(Page):
 				total_zone_capacity += device["size"]
 				total_used += device["used"]
 				if selected_zone == str(zone):
-					zonetablebody += """
+					zonetablebody += '''
 							<tr>
-								<td>"""+device["ip"]+"/"+device["device"]+"""</td>
-								<td>"""+str(device["used"])+"""</td>
-								<td>"""+str(device["size"]-device["used"])+"""</td>
-								<td>"""+str(device["size"])+"""</td>
-							</tr>"""
-			zonetotaltable += """
-							<tr onclick=\"document.location =\'?zone="""+str(zone)+"""\';\">
-								<td>"""+str(zone)+"""</td>
-								<td>"""+str(total_used)+"""</td>
-								<td>"""+str(total_zone_capacity - total_used)+"""</td>
-								<td>"""+str(total_zone_capacity)+"""</td>
-							</tr>"""
+								<td>'''+device["ip"]+"/"+device["device"]+'''</td>
+								<td>'''+str(device["used"])+'''</td>
+								<td>'''+str(device["size"]-device["used"])+'''</td>
+								<td>'''+str(device["size"])+'''</td>
+							</tr>'''
+			zonetotaltable += '''
+							<tr class="'''+("row_selected" if (selected_zone==str(zone)) else "")+'''" onclick=\"document.location =\'?zone='''+str(zone)+'''\';\">
+								<td>'''+str(zone)+'''</td>
+								<td>'''+str(total_used)+'''</td>
+								<td>'''+str(total_zone_capacity - total_used)+'''</td>
+								<td>'''+str(total_zone_capacity)+'''</td>
+							</tr>'''
 			total_sys_capacity += total_zone_capacity
 			total_sys_used += total_used
-		zonetotaltable += """
+		zonetotaltable += '''
 					</tbody>
 				</table>
-				"""
+				</div>
+				'''
 				
 
-		self.addContent("""
+		self.addContent('''
 				<table id="systemtable" style="display:none;" >
 					<thead><tr>
 						<th></th>
 						<th></th>
 					</tr></thead>
 					<tbody>
-						<tr><td>Total Used</td><td>"""+str(total_sys_used)+"""</td></tr>
-						<tr><td>Total Available</td><td>"""+str(total_sys_capacity - total_sys_used)+"""</td></tr>
+						<tr><td>Total Used</td><td>'''+str(total_sys_used)+'''</td></tr>
+						<tr><td>Total Available</td><td>'''+str(total_sys_capacity - total_sys_used)+'''</td></tr>
 					</tbody>
 				</table>
-				""");
+				''');
 		
 		self.addContent(zonetotaltable)
 		
-		self.addContent("""
-			<h2>Zone: """+str(selected_zone)+"""</h2>
+		self.addContent('''
+		<div class="datatable">
+			<h2>Zone: '''+str(selected_zone)+'''</h2>
 			<table id="zonetable">
 				<thead><tr>
 					<th>Zone</th>
@@ -179,10 +182,11 @@ class Pcap(Page):
 					<th>Total</th>
 				</tr></thead>
 				<tbody>
-			""" + zonetablebody + """
-					</tbody>
-				</table>
-			""")
+			''' + zonetablebody + '''
+				</tbody>
+			</table>
+		</div>	
+			''')
 		
 	def fetchDrives(self, zone):
 		iZone = int(zone) #Is this how casting shit works?

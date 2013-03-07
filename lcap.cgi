@@ -32,11 +32,11 @@ class Lcap(Page):
 						$(event.target.parentNode).addClass('row_selected');
 					});
 			
-                    oTable = $('#tenanttable').dataTable({"sPaginationType": "full_numbers"});
+                    oTable = $('#tenanttable').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
                     //$("#tenanttable table").each(function () {
-                    //  $(this).dataTable({"sPaginationType": "full_numbers"});
+                    //  $(this).dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
                     //});
-                    $('#containertable').dataTable({"sPaginationType": "full_numbers"});
+                    $('#containertable').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
                     
                     var pies = [
                         {"holder":"tenantpie","datatable":"#tenanttable","title":"Tenant Pie"},
@@ -126,10 +126,10 @@ class Lcap(Page):
 
         conn = Connection(authurl=endpoint, user=creds, key=password, auth_version='2')
 
-        body = conn.get_account()   
+        headers, body = conn.get_account()   
 
-        for x in range(len (body[1])):
-            cont_inf = body[1][x]
+        for x in range(len (body)):
+            cont_inf = body[x]
             cont_values = cont_inf.values()
             self.addContent('<tr>')
             self.addContent('<td>' + cont_values[2] + '</td>')

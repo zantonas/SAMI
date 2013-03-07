@@ -9,10 +9,8 @@ body, html {
 }
 
 .navigation {
-	width:20%;
-	max-width: 250px;
+	width: 250px;
 	height: 100%;
-	min-width: 170px;
 	border-right-style: solid;
 	border-right-color: #E6E6E6;
 	background-color: #E6E6E6;
