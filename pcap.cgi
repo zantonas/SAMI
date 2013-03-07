@@ -7,6 +7,7 @@ from swift.common.ring.ring import RingData
 import json
 import os
 import cgi
+from  pcap import fetchDrivesInBuilder
 
 class Pcap(Page):
 	name = "Physical Capacity"
@@ -20,7 +21,7 @@ class Pcap(Page):
 	
 	def testZoneThings(self):
 		recon = CallRecon('192.168.1.121', '6010').establishConnection()
-                zDrives = self.fetchAllDrives()
+                zDrives = fetchDrivesInBuilder("object")
                 reconData = {}
 		for zone in zDrives:
                         self.addContent("<br/>Zone: " + str(zDrives[zone][0]['zone']))
@@ -99,11 +100,7 @@ class Pcap(Page):
 			</div>''');
 	
 	def generate_tables(self):
-		try:
-			zoned_devs = self.fetchAllDrives()
-		except:
-			os.system("sudo /bin/chmod 710 /etc/swift/")
-			zoned_devs = self.fetchAllDrives()
+		zoned_devs = fetchDrivesInBuilder("object")
 		
 		total_capacity = 0
 		total_used = 0

@@ -3,7 +3,7 @@ from components import Page
 import cgi
 import json
 import os
-from  pcap import PcapTools
+from  pcap import fetchDrivesInBuilder
 
 class mdrives(Page):
         name = "Drive management"
@@ -14,14 +14,13 @@ class mdrives(Page):
                 Page.__init__(self)
 
 	def listDrives(self):
-		ptool = PcapTools()
 		return '''
 		<b>Object Server</b> <br />
-		''' + str(ptool.fetchDrivesInBuilder('object')) + ''' <br /><br />
+		''' + str(fetchDrivesInBuilder('object')) + ''' <br /><br />
 		<b>Account Server</b> <br />
-		''' + str(ptool.fetchDrivesInBuilder('account')) + ''' <br /><br />
+		''' + str(fetchDrivesInBuilder('account')) + ''' <br /><br />
 		<b>Container Server</b> <br />
-		''' + str(ptool.fetchDrivesInBuilder('container'))
+		''' + str(fetchDrivesInBuilder('container'))
 	def inputForm(self):
 		return ''' <hr/> <b> ADD DRIVE </b><br />
 		<form action="addDrive.cgi" method="get" target="_blank">
