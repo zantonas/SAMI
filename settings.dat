@@ -1,7 +1,7 @@
 ***DO NOT CHANGE THE FORMAT OF THIS FILE***
 ***Each line represents a value in the following format:***
 ***KEYSTONE_ADMIN_TOKEN, KEYSTONE_ENDPOINT, SUPER_USER, SUPER_USER_PASSWORD***
-TOKEN
-ENDPOINT
-SUPER_USER
-SUPER_PASSWORD
+ADMIN
+http://10.29.125.11:35357/v2.0/
+admin
+secrete

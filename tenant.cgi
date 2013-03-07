@@ -130,12 +130,12 @@ class Tenants(Page):
                     break
             if ten_valid == True:
 
-                user_name='admin'
-                password='secrete'
+                user_name=settings[5]
+                password=settings[6]
                 account_name=tenant_name
                 creds=account_name + ':' + user_name
         
-                conn = Connection(authurl=endpoint, user=creds, key=password, auth_version='2')
+                conn = Connection(authurl=settings[4], user=creds, key=password, auth_version='2')
     
                 add_cont_name = form.getvalue("addcontname")            
                 if add_cont_name != None:
