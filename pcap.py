@@ -4,6 +4,7 @@ from reconWrapping import CallRecon
 from swiftclient import Connection
 from swift.common.ring.ring import Ring
 from swift.common.ring.ring import RingData
+import subprocess
 import json
 
 class PcapTools:
@@ -49,6 +50,11 @@ class PcapTools:
                                                         iDev['used'] = dev['used']
                                                         iDev['size'] = dev['size']
                 return zoned_devs
+
+	def drivesInBuilder(self, builder):
+		output = subprocess.check_output(["swift-ring-builder", "/etc/swift/object.builder"])
+		output_list = output.split('\n')
+		print(output_list[4:])
 
         def fetchDrivesInBuilder(self, builder):
                 conf = {}
