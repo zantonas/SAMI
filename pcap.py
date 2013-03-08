@@ -30,11 +30,29 @@ def fetchDrives(zone):
 		return zoned_devs[iZone]
 	else:
 		return '[{}]'
+def test():
+	drivesInBuilder("")
 
-def drivesInBuilder(self, builder):
+def removeDrive(builder, ip, device):
 	output = subprocess.check_output(["swift-ring-builder", "/etc/swift/object.builder"])
-	output_list = output.split('\n')
-	print(output_list[4:])
+
+def drivesInBuilder(builder):
+	output = subprocess.check_output(["swift-ring-builder", "/etc/swift/object.builder"])
+	output_list = output.split('\n') #Break the output into a list seperated by new lines
+
+	#Header related stuff#
+	headers_dirty = output_list[3].split()[1:] #Make a list of the headers
+	headers = map(lambda x: x.replace(":", ""), headers_dirty) #Clean up the headers (remove things like colons)
+	headers = filter(lambda x: x!= "address", headers) #Removed the "address element"
+	headers = map(lambda x: x if x != "ip" else "ip address", headers) #Changed "ip" to "ip address"
+
+	#Drive list related stuff#
+	filtered_list = filter(lambda x: x != "" , output_list)[4:] #Remove empty spaces
+	clean_list = map(lambda x: x.split(), filtered_list) #Remove the whitespace
+
+	print(headers)
+	print(clean_list[0])
+	print(map(lambda x : dict(zip(headers, x)),clean_list))
 
 def fetchDrivesInBuilder(builder):
 	conf = {}
