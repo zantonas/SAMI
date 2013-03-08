@@ -141,6 +141,8 @@ class Tenants(Page):
                 add_cont_name = form.getvalue("addcontname")            
                 if add_cont_name != None:
                     conn.put_container(add_cont_name)
+		    conn.post_container(add_cont_name, {("X-Container-Read"):settings[9]})
+		    conn.post_container(add_cont_name, {("X-Container-Write"):settings[9]})
 
                 del_cont_name = form.getvalue("delcontname")
                 if del_cont_name != None:
