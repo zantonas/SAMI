@@ -65,9 +65,6 @@ class Lcap(Page):
 
         user_name=settings[5]
         password=settings[6]
-        #account_name=''     
-        #creds=account_name + ':' + user_name
-        
 
         self.addContent('<div id="tables">\n')
         self.addContent('''
