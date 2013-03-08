@@ -36,8 +36,20 @@ def test():
 def removeDrive(builder, ip, device):
 	output = subprocess.check_output(["swift-ring-builder", "/etc/swift/object.builder"])
 
+def drivesByZone():
+	drives = allDrives()
+	zoned_devs = {}
+	for d in drives:
+		if d['zone'] in zoned_devs:
+			zoned_devs[d['zone']].append(d)
+		else:
+			zoned_devs[d['zone']] = [d]
+	return zoned_devs
 def allDrives():
-	all_drives =  drivesInBuilder("object") + drivesInBuilder("account") + drivesInBuilder("container")
+	return drivesInBuilder("object") + drivesInBuilder("account") + drivesInBuilder("container")
+
+def allUniqueDrives():
+	all_drives =  allDrives()
 	unique_drives = []
 	ip_names = set([])
 	for d in all_drives:
@@ -45,7 +57,7 @@ def allDrives():
 		if ip_name not in ip_names:
 			unique_drives.append(d)
 		ip_names.add(ip_name)
-	print(unique_drives)
+	return unique_drives
 
 def drivesInBuilder(builder):
 	output = subprocess.check_output(["swift-ring-builder", "/etc/swift/" + builder + ".builder"])
