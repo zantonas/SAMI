@@ -3,7 +3,7 @@ from components import Page
 import cgi
 import json
 import os
-from pcap import PcapTools
+import pcap
 class AddDrive(Page):
         name = "Add Drive"
 

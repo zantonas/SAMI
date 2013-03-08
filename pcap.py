@@ -36,8 +36,19 @@ def test():
 def removeDrive(builder, ip, device):
 	output = subprocess.check_output(["swift-ring-builder", "/etc/swift/object.builder"])
 
+def allDrives():
+	all_drives =  drivesInBuilder("object") + drivesInBuilder("account") + drivesInBuilder("container")
+	unique_drives = []
+	ip_names = set([])
+	for d in all_drives:
+		ip_name = (d["ip address"], d["name"])
+		if ip_name not in ip_names:
+			unique_drives.append(d)
+		ip_names.add(ip_name)
+	print(unique_drives)
+
 def drivesInBuilder(builder):
-	output = subprocess.check_output(["swift-ring-builder", "/etc/swift/object.builder"])
+	output = subprocess.check_output(["swift-ring-builder", "/etc/swift/" + builder + ".builder"])
 	output_list = output.split('\n') #Break the output into a list seperated by new lines
 
 	#Header related stuff#
