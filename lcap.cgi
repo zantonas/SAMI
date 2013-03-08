@@ -54,7 +54,7 @@ class Lcap(Page):
     
     def generate_tables(self):
 
-	f = open("settings.dat", "r")
+	f = open("settings.conf", "r")
 	settings = []
 	for line in f:
         	settings.append(line.split('\n')[0])
@@ -65,8 +65,8 @@ class Lcap(Page):
 
         user_name=settings[5]
         password=settings[6]
-        account_name=''     
-        creds=account_name + ':' + user_name
+        #account_name=''     
+        #creds=account_name + ':' + user_name
         
 
         self.addContent('<div id="tables">\n')
