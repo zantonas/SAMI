@@ -28,13 +28,11 @@ class Permissions(Page):
         ####################
         form = cgi.FieldStorage()
         
-        ###################
-
         tenlist = keystone.tenants.list()
         
         tenant_id = form.getvalue('tenant')
-
-        if tenant_id == None:
+        
+	if tenant_id == None:
             self.addContent('''
             <table border="1">
             <tr>
@@ -50,7 +48,10 @@ class Permissions(Page):
                 self.addContent('<td>' + tenlist[i].name + '</td>')
                 self.addContent('<td>' + tenlist[i].id + '</td>')
                 self.addContent('<td>' + str(tenlist[i].description) + '</td>')
-                self.addContent('<td>' + str(tenlist[i].enabled) + '</td>')
+		if tenlist[i].enabled != None:
+			self.addContent('<td>' + str(tenlist[i].enabled) + '</td>')
+		else:
+			self.addContent('<td>False</td>')
                 self.addContent('''
                                 <td>
                                     <form action="permissions.cgi" method="get">
@@ -59,7 +60,7 @@ class Permissions(Page):
                                 </td>
                                 ''')                     
             self.addContent('</table>')
-        else:
+	else:
             tenlist = keystone.tenants.list()
             ten_valid = False
             ##Ensure that tenant_id is valid (HTTP GET)
@@ -70,29 +71,34 @@ class Permissions(Page):
             if ten_valid == False:
                         self.addContent('Not a valid tenant_ID')###change this to make it spit out a list of tenants                    
             else:
-                permission = form.getvalue('permission')
-                permission_user_id = form.getvalue('permissionuserid')
-                permission_role_id = form.getvalue('permissionroleid')
+		permission = form.getvalue('permissionsubmit')
+		
+		if permission == 'Grant':
+			grant_permission_user_id = form.getvalue('grantpermissionuserid')
+                	grant_permission_role_id = form.getvalue('grantpermissionroleid')
+			if ((grant_permission_role_id != None) and (grant_permission_user_id != None)):
+                        	try:
+                                	keystone.tenants.add_user(tenant=tenant_id,user=grant_permission_user_id,role=grant_permission_role_id)
+                        	except:
+                            		pass
+		elif (permission == 'Revoke'):
+			revoke_permission_user_id = form.getvalue('revokepermissionuserid')
+                	revoke_permission_role_id = form.getvalue('revokepermissionroleid')
+			if ((revoke_permission_role_id != None) and (revoke_permission_user_id != None)):
+                        	try:
+                        		keystone.tenants.remove_user(tenant=tenant_id,user=revoke_permission_user_id,role=revoke_permission_role_id)
+				except:
+                            		pass
                 
-                if ((permission_user_id != None) and (permission_role_id != None) and (permission != None)):
-                    if permission == 'grant': 
-                        try:
-                            keystone.tenants.add_user(tenant=tenant_id,user=permission_user_id,role=permission_role_id)
-                        except:
-                            pass
-                    elif permission == 'revoke':
-                        try:
-                            keystone.tenants.remove_user(tenant=tenant_id,user=permission_user_id,role=permission_role_id)
-                        except:
-                            pass
-                
+		####TENANT NAME
+		self.addContent('<h2>Tenant: '+tenlist[i].name+'</h2>')
                 userlist =  keystone.tenants.list_users(tenant=tenant_id)
-                
-                self.addContent('<table border="1"><tr><th>Name</th><th>ID</th><th>Email</th><th>Enabled</th><th>Roles</th></tr>')
+                self.addContent('<h3>Users:</h3>') 
+                self.addContent('<table border="1"><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Roles</th></tr>')
                 for i in range(len(userlist)):
                     self.addContent('<tr>')
                     self.addContent('<td>' + str(userlist[i].name) + '</td>')
-                    self.addContent('<td>' + str(userlist[i].id) + '</td>')
+                    #self.addContent('<td>' + str(userlist[i].id) + '</td>')
                     self.addContent('<td>' + str(userlist[i].email) + '</td>')
                     if userlist[i].enabled == True:
                         self.addContent('<td> True </td>')
@@ -101,31 +107,38 @@ class Permissions(Page):
                         self.addContent('</tr>')
                     self.addContent('<td>')
                     user_roles_list = keystone.users.list_roles(user=userlist[i], tenant=tenant_id)
+		    self.addContent('<form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
+		    self.addContent('<select name="revokepermissionroleid">')
                     for x in range(len(user_roles_list)):
-                        self.addContent(user_roles_list[x].name)
-                        if x+1 != len(user_roles_list):
-                            self.addContent(', ')
+                        self.addContent('<option value="' + user_roles_list[x].id +'">' + user_roles_list[x].name + '</option>')
+		    self.addContent('<input type="hidden" name="revokepermissionuserid" value="'+userlist[i].id+'">')
+		    self.addContent('''<input type="submit" name="permissionsubmit" value="Revoke" /></form>''');
+
                     self.addContent('</td>')
+                self.addContent('</table><br>')
+		
+		#############################
+		keyst_users = keystone.users.list()
+		self.addContent('<h3>Grant Access:</h3>')
+		self.addContent('<table border="1"><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Roles</th></tr>')
+                for i in range(len(keyst_users)):
+                    self.addContent('<tr>')
+                    self.addContent('<td>' + str(keyst_users[i].name) + '</td>')
+                    #self.addContent('<td>' + str(keyst_users[i].id) + '</td>')
+                    self.addContent('<td>' + str(keyst_users[i].email) + '</td>')
+		    if keyst_users[i].enabled == True:
+                        self.addContent('<td> True </td>')
+                    else:
+                        self.addContent('<td> False </td>')
+
+		    self.addContent('<td> <form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
+		    self.addContent('<input type="hidden" name="grantpermissionuserid" value="'+keyst_users[i].id+'">')
+		    self.addContent('<select name="grantpermissionroleid">')
+		    roles = keystone.roles.list()
+		    for x in range(len(roles)):
+                    	self.addContent('<option value="' + roles[x].id +'">' + roles[x].name + '</option>')
+		    self.addContent('''<input type="submit" name="permissionsubmit" value="Grant" /></form></td>''');
+                    self.addContent('</tr>')
                 self.addContent('</table>')
-    
-                self.addContent('<br><b>Permissions:</b><br>')
-                self.addContent('<form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
-                self.addContent('<select name="permission"> <option value="grant"> grant </option> <option value="revoke"> revoke </option>')
-                self.addContent('''<b>User: </b><input type="text" name="permissionuserid" />''')
-                self.addContent('<select name="permissionroleid">')
-                roles = keystone.roles.list()
-                for i in range(len(roles)):
-                    self.addContent('<option value="' + roles[i].id +'">' + roles[i].name + '</option>')    
-                self.addContent('''<input type="submit" name="permissionsubmit" /></form>''');
-
-
-                #self.addContent('<br><b>Revoke permissions:</b><br>')
-                                #self.addContent('<form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
-                                #self.addContent('''<b>User: </b><input type="text" name="revokeuserid" />''')
-                                #self.addContent('<select name="revokeroleid">')
-                                #for i in range(len(roles)):
-                                #        self.addContent('<option value="' + roles[i].id +'">' + roles[i].name + '</option>')
-                                #self.addContent('''<input type="submit" name="revokesubmit" /></form>''');
-
 
 Page = Permissions()
