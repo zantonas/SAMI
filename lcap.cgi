@@ -84,28 +84,29 @@ class Lcap(Page):
         form = cgi.FieldStorage()
         selected_account = form.getvalue('tenant')
         for i in range(len(tenlist)):
-            
-            account_name = tenlist[i].name
-            creds=account_name + ':' + user_name
+           
+	    if tenlist[i].enabled == True:
+            	account_name = tenlist[i].name
+            	creds=account_name + ':' + user_name
 
-            conn = Connection(authurl=settings[4], user=creds, key=password, auth_version='2')
+            	conn = Connection(authurl=settings[4], user=creds, key=password, auth_version='2')
             
-            headers = conn.head_account()
+            	headers = conn.head_account()
             
             
-            ####NEED TO CATCH RESPONSE CODE HERE - IF NOT 200 THEN RETURN 0,0,0 bytes IN TABLE (AND MARK AS CANNOT READ INFO).
+            	####NEED TO CATCH RESPONSE CODE HERE - IF NOT 200 THEN RETURN 0,0,0 bytes IN TABLE (AND MARK AS CANNOT READ INFO).
 
-            total_containers = headers.get('x-account-container-count', 0)
-            total_objects = headers.get('x-account-object-count', 0)
-            total_bytes = headers.get('x-account-bytes-used', 0)
+            	total_containers = headers.get('x-account-container-count', 0)
+            	total_objects = headers.get('x-account-object-count', 0)
+            	total_bytes = headers.get('x-account-bytes-used', 0)
             
-            self.addContent('<tr class="'+("row_selected" if (selected_account==account_name or (selected_account == None and i == 0)) else "")+'" onclick=\"document.location =\'?tenant='+account_name+'\';\">')
-            self.addContent('<td>' + account_name + '</td>')
-            self.addContent('<td>' + str (total_objects) + '</td>')
-            self.addContent('<td>' + str (total_containers) + '</td>')
-            self.addContent('<td>' + str (total_bytes) + '</td>')
-            self.addContent('</tr>')
-            if selected_account == None: selected_account = account_name
+            	self.addContent('<tr class="'+("row_selected" if (selected_account==account_name or (selected_account == None and i == 0)) else "")+'" onclick=\"document.location =\'?tenant='+account_name+'\';\">')
+            	self.addContent('<td>' + account_name + '</td>')
+            	self.addContent('<td>' + str (total_objects) + '</td>')
+           	self.addContent('<td>' + str (total_containers) + '</td>')
+            	self.addContent('<td>' + str (total_bytes) + '</td>')
+            	self.addContent('</tr>')
+            	if selected_account == None: selected_account = account_name
 
         self.addContent('</tbody></table></div>')
         self.addContent('''
