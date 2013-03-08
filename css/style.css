@@ -39,7 +39,7 @@ body, html {
 	padding: 10px;
 	background-color: #ffffff;
 	color: #000000;
-    position: relative;
+    position: absolute;
 	margin-left: 250px;
 }
 
