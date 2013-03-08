@@ -16,7 +16,7 @@ body, html {
 	background-color: #E6E6E6;
 	padding-top: 150px;
 	float: left;
-	position: fixed;
+	position: relative;
 }
 .main {
 	height: 100%;
