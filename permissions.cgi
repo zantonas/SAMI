@@ -106,7 +106,7 @@ class Permissions(Page):
                         if x+1 != len(user_roles_list):
                             self.addContent(', ')
                     self.addContent('</td>')
-                    self.addContent('</table>')
+                self.addContent('</table>')
     
                 self.addContent('<br><b>Permissions:</b><br>')
                 self.addContent('<form action="permissions.cgi?tenant='+tenant_id+'" method="post">')
