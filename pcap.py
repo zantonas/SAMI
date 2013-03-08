@@ -50,9 +50,7 @@ def drivesInBuilder(builder):
 	filtered_list = filter(lambda x: x != "" , output_list)[4:] #Remove empty spaces
 	clean_list = map(lambda x: x.split(), filtered_list) #Remove the whitespace
 
-	print(headers)
-	print(clean_list[0])
-	print(map(lambda x : dict(zip(headers, x)),clean_list))
+	return map(lambda x : dict(zip(headers, x)),clean_list)
 
 def fetchDrivesInBuilder(builder):
 	conf = {}
