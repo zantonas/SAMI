@@ -54,7 +54,7 @@ class Tenants(Page):
     
     def generate_tables(self):
 
-	f = open("settings.dat", "r")
+	f = open("settings.conf", "r")
         settings = []
         for line in f:
                 settings.append(line.split('\n')[0])
