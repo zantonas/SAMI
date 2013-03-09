@@ -10,33 +10,35 @@ class Alerting(Page):
                 self.establishConnection()
                 Page.__init__(self)
         def establishConnection(self):
-
-                f = open("alerting.dat", "r")
-                alerts = []
-                for line in f:
-                        alerts.append(line)
+		try:
+		        f = open("alerting.dat", "r")
+		except:
+			self.addContent('No data is availible. <b>Have you set up a cron job to run alerting.py?</b><br><b>If you have</b>, it may be that data is currently being gathered. Please wait a moment before refreshing the page.')
+			return
+		alerts = []
+	        for line in f:
+       	            	alerts.append(line)
 
                 if (alerts[0]== '\n') and (alerts[1] == '{}'):
-                        self.addContent('No issues detected. Cluster is OK.')
+                       	self.addContent('No issues detected. Cluster is OK.')
                 else:
-                        self.addContent('Openstack Swift Alert!<br><br>')
+                       	self.addContent('Openstack Swift Alert!<br><br>')
 
                 if alerts[0] != '\n':
-                        unpingable_nodes = alerts[0].split(',')
-                        self.addContent('Node issues detected!<br>The following Nodes are unpingable:<br><br>')
-                        self.addContent('<table border=1><th>Node IP</th>')
-                        for ip in range(len(unpingable_nodes)):
-                                self.addContent('<tr><td>' + unpingable_nodes[ip] + '</td></tr>')
-                        self.addContent('</table><br>')
+                       	unpingable_nodes = alerts[0].split(',')
+                       	self.addContent('Node issues detected!<br>The following Nodes are unpingable:<br><br>')
+                       	self.addContent('<table border=1><th>Node IP</th>')
+                       	for ip in range(len(unpingable_nodes)):
+                               	self.addContent('<tr><td>' + unpingable_nodes[ip] + '</td></tr>')
+                	self.addContent('</table><br>')
                 if alerts[1] != '{}':
-                        unmounted_drives  = ast.literal_eval(str(alerts[1]))
-                        self.addContent('Drive errors detected!<br>The following drives have been automatically unmounted to avoid further issues:<br><br>')
-                        for ip in unmounted_drives:
-                                self.addContent('<table border=1><th>Node IP</th><th>Disk</th>')
-                                for x in range(len(unmounted_drives[ip])):
-                                        self.addContent('<tr><td>' + ip + '</td><td>' + unmounted_drives[ip][x]['device'] + '</td><tr>')
-                                self.addContent('</table>')
-
+                       	unmounted_drives  = ast.literal_eval(str(alerts[1]))
+                       	self.addContent('Drive errors detected!<br>The following drives have been automatically unmounted to avoid further issues:<br><br>')
+			self.addContent('<table border=1><th>Node IP</th><th>Disk</th>')
+                       	for ip in unmounted_drives:
+                               	for x in range(len(unmounted_drives[ip])):
+                                       	self.addContent('<tr><td>' + ip + '</td><td>' + unmounted_drives[ip][x]['device'] + '</td><tr>')
+                        self.addContent('</table>')
 
 page = Alerting()
 

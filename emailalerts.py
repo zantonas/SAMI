@@ -5,7 +5,11 @@ import json
 import ast
 from email.mime.text import MIMEText
 
-f = open("alerting.dat", "r")
+try:
+	f = open("alerting.dat", "r")
+except:
+	print "Please wait for the data to be collected. This will only take a moment."
+	quit()	
 alerts = []
 for line in f:
         alerts.append(line)
