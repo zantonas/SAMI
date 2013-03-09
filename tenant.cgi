@@ -136,6 +136,15 @@ class Tenants(Page):
         if ten_id != None:
             keystone.tenants.delete(ten_id)
 
+
+	enable = form.getvalue("enable")
+        if enable != None:
+            keystone.tenants.update(tenant_id=enable, enabled=True)
+        disable = form.getvalue("disable")
+        if disable != None:
+            keystone.tenants.update(tenant_id=disable, enabled=False)
+
+
         ###################
         tenant_id = form.getvalue('tenant')
         tenlist = keystone.tenants.list()
@@ -150,15 +159,18 @@ class Tenants(Page):
                 self.addContent('<td>' + tenlist[i].id + '</td>')
                 self.addContent('<td>' + str(tenlist[i].description) + '</td>')
                 if tenlist[i].enabled == True:
-                    self.addContent('<td>True</td>')
+                    self.addContent('<td>True ')
+		    self.addContent('<form action="tenant.cgi" method="post"> <button type="disable" name="disable" value="' + tenlist[i].id + '">Disable</button></form>  </td>')
+		    self.addContent('<td> <form action="tenant.cgi" method="get"> <button type="submit" name="tenant" value="'+ tenlist[i].id +'">Modify</button></form></td>')
                 else:
-                    self.addContent('<td>False</td>')
-                self.addContent('<td> <form action="tenant.cgi" method="get"> <button type="submit" name="tenant" value="'+ tenlist[i].id +'">Modify</button></form></td>')
+                    self.addContent('<td>False ')
+		    self.addContent('<form action="tenant.cgi" method="post"> <button type="disable" name="enable" value="' + tenlist[i].id + '">Enable</button></form>  </td>')
+                    self.addContent('<td>N/A</td>')
                 self.addContent('<td> <form action="tenant.cgi" method="post"> <button type="submit" name="deltensubmit" value="' + tenlist[i].id + '">Delete</button></form>  </td>')
                 self.addContent('</tr>')
             self.addContent('''
                             </table>
-                            <br><br><br>
+                            <br>
                             <b>Add Tenant:</b>
                             <br>''')
             self.addContent('''<form action="tenant.cgi" method="post">
