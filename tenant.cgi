@@ -151,7 +151,7 @@ class Tenants(Page):
         
 
         if tenant_id == None:
-            self.addContent('<table border="1"><tr><th>Name</th><th>ID</th><th>description</th><th>Enabled</th><th>Modify</th><th>Delete</th></tr>')
+            self.addContent('<table border="1"><tr><th>Name</th><th>ID</th><th>description</th><th>Enabled</th><th>Action</th></tr>')
 
             for i in range(len(tenlist)):
                 self.addContent('<tr>')
@@ -159,14 +159,13 @@ class Tenants(Page):
                 self.addContent('<td>' + tenlist[i].id + '</td>')
                 self.addContent('<td>' + str(tenlist[i].description) + '</td>')
                 if tenlist[i].enabled == True:
-                    self.addContent('<td>True ')
-		    self.addContent('<form action="tenant.cgi" method="post"> <button type="disable" name="disable" value="' + tenlist[i].id + '">Disable</button></form>  </td>')
-		    self.addContent('<td> <form action="tenant.cgi" method="get"> <button type="submit" name="tenant" value="'+ tenlist[i].id +'">Modify</button></form></td>')
+                    self.addContent('<td>True</td>')
+		    self.addContent('<td><form action="tenant.cgi" method="post"> <button type="disable" name="disable" value="' + tenlist[i].id + '">Disable</button></form>')
+		    self.addContent('<form action="tenant.cgi" method="get"> <button type="submit" name="tenant" value="'+ tenlist[i].id +'">Modify</button></form>')
                 else:
-                    self.addContent('<td>False ')
-		    self.addContent('<form action="tenant.cgi" method="post"> <button type="disable" name="enable" value="' + tenlist[i].id + '">Enable</button></form>  </td>')
-                    self.addContent('<td>N/A</td>')
-                self.addContent('<td> <form action="tenant.cgi" method="post"> <button type="submit" name="deltensubmit" value="' + tenlist[i].id + '">Delete</button></form>  </td>')
+                    self.addContent('<td>False</td>')
+		    self.addContent('<td><form action="tenant.cgi" method="post"> <button type="disable" name="enable" value="' + tenlist[i].id + '">Enable</button></form>')
+                self.addContent('<form action="tenant.cgi" method="post"> <button type="submit" name="deltensubmit" value="' + tenlist[i].id + '">Delete</button></form>  </td>')
                 self.addContent('</tr>')
             self.addContent('''
                             </table>

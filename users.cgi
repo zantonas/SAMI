@@ -52,7 +52,7 @@ class Users(Page):
 
 		userlist =  keystone.users.list() # List users
 
-		self.addContent('<table border="1"><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Delete</th></tr>')
+		self.addContent('<table border="1"><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Action</th></tr>')
 
 		for i in range(len(userlist)):
 			self.addContent('<tr>')
@@ -60,12 +60,12 @@ class Users(Page):
 		        #self.addContent('<td>' + userlist[i].id + '</td>')
 			self.addContent('<td>' + str(userlist[i].email) + '</td>')
 			if userlist[i].enabled == True:
-				self.addContent('<td> True ')
-				self.addContent('<form action="users.cgi" method="post"> <button type="disable" name="disable" value="' + userlist[i].id + '">Disable</button></form>  </td>')
+				self.addContent('<td> True </td>')
+				self.addContent('<td><form action="users.cgi" method="post"> <button type="disable" name="disable" value="' + userlist[i].id + '">Disable</button>')
 			else:
-				self.addContent('<td> False ')
-				self.addContent('<form action="users.cgi" method="post"> <button type="enable" name="enable" value="' + userlist[i].id + '">Enable</button></form>  </td>')
-			self.addContent('<td> <form action="users.cgi" method="post"> <button type="submit" name="id" value="' + userlist[i].id + '">Delete</button></form>  </td>')
+				self.addContent('<td> False </td>')
+				self.addContent('<td><form action="users.cgi" method="post"> <button type="enable" name="enable" value="' + userlist[i].id + '">Enable</button>')
+			self.addContent('<button type="submit" name="id" value="' + userlist[i].id + '">Delete</button></form>  </td>')
 			self.addContent('</tr>')		
 		self.addContent('</table>')				
 
