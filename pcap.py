@@ -33,6 +33,23 @@ def fetchDrives(zone):
 def test():
 	drivesInBuilder("")
 
+
+def totalSpace():
+	drives = allUniqueDrives()
+	drive_data = []
+	for d in drives:
+		server_location = "http://%(ip address)s:%(port)s/recon/diskusage" % d
+		try:
+			result = subprocess.check_output(["curl", "-silent", "-i", server_location], shell=False)
+			drive_usage = json.loads(result.split("\n")[-1])[0]
+			drive_data.append(drive_usage)
+		except subprocess.CalledProcessError:
+			pass #Something should be done here.
+	used_space = float(sum([d["used"] for d in drive_data]))
+	total_space = float(sum([d["size"] for d in drive_data]))
+	return (used_space, total_space)
+
+#To be implemented#
 def removeDrive(builder, ip, device):
 	output = subprocess.check_output(["swift-ring-builder", "/etc/swift/object.builder"])
 
