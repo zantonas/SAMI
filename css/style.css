@@ -16,7 +16,6 @@ body, html {
 	background-color: #E6E6E6;
 	padding-top: 150px;
 	float: left;
-	position: relative;
 }
 .main {
 	height: 100%;
@@ -36,11 +35,13 @@ body, html {
 }
 
 .page {
+	left: 250px;
+	float: left;
+	min-width: 600px;
 	padding: 10px;
 	background-color: #ffffff;
 	color: #000000;
-    position: absolute;
-	margin-left: 250px;
+	position: absolute;
 }
 
 
