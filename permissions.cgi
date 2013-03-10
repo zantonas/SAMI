@@ -12,8 +12,18 @@ class Permissions(Page):
     name = 'Permissions Management'
     
     def __init__(self):
-        self.generate_tables()
+        self.generate_header()
+	self.generate_tables()
         Page.__init__(self)
+
+    def generate_header(self):
+            self.headerresources += '''
+            <script src="js/jquery-1.9.0.min.js"></script>
+            <script src="js/jquery.dataTables.min.js"></script>
+            <link rel="stylesheet" href="css/jquery.dataTables.css" media="screen">
+            <script type="text/javascript">
+                $(function () {
+            $('#tenants').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});});</script>'''
         
     def generate_tables(self):
 
@@ -34,14 +44,14 @@ class Permissions(Page):
         
 	if tenant_id == None:
             self.addContent('''
-            <table border="1">
+            <table id="tenants"><thead>
             <tr>
             <th>Name</th>
             <th>ID</th>
             <th>description</th>
             <th>Enabled</th>
             <th>Modify</th>
-            </tr>''')
+            </tr></thead><tbody>''')
 
             for i in range(len(tenlist)):
                 self.addContent('<tr>')
@@ -50,16 +60,17 @@ class Permissions(Page):
                 self.addContent('<td>' + str(tenlist[i].description) + '</td>')
 		if tenlist[i].enabled != None:
 			self.addContent('<td>' + str(tenlist[i].enabled) + '</td>')
-		else:
-			self.addContent('<td>False</td>')
-                self.addContent('''
+			self.addContent('''
                                 <td>
                                     <form action="permissions.cgi" method="get">
                                     <button type="submit" name="tenant" value="'''+ tenlist[i].id +'''">Modify</button>
                                     </form>
-                                </td>
-                                ''')                     
-            self.addContent('</table>')
+                                </td</tr>
+                                ''')
+		else:
+			self.addContent('<td>False</td>')
+                	self.addContent('<td>N/A</td></tr>')                     
+            self.addContent('</tbody></table>')
 	else:
             tenlist = keystone.tenants.list()
             ten_valid = False

@@ -12,9 +12,19 @@ class Users(Page):
 	name = 'User Management'
 	
 	def __init__(self):
+		self.generate_header()
 		self.generate_tables()
 		Page.__init__(self)
-		
+
+	def generate_header(self):
+	    self.headerresources += '''
+            <script src="js/jquery-1.9.0.min.js"></script>
+            <script src="js/jquery.dataTables.min.js"></script>
+            <link rel="stylesheet" href="css/jquery.dataTables.css" media="screen">
+	    <script type="text/javascript">
+		$(function () {	
+	    $('#usertable').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});});</script>'''
+	
 	def generate_tables(self):
 
 		f = open("settings.conf", "r")
@@ -52,7 +62,7 @@ class Users(Page):
 
 		userlist =  keystone.users.list() # List users
 
-		self.addContent('<table border="1"><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Action</th></tr>')
+		self.addContent('<table id="usertable"><thead><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Action</th></tr></thead><tbody>')
 
 		for i in range(len(userlist)):
 			self.addContent('<tr>')
@@ -67,7 +77,7 @@ class Users(Page):
 				self.addContent('<td><form action="users.cgi" method="post"> <button type="enable" name="enable" value="' + userlist[i].id + '">Enable</button>')
 			self.addContent('<button type="submit" name="id" value="' + userlist[i].id + '">Delete</button></form>  </td>')
 			self.addContent('</tr>')		
-		self.addContent('</table>')				
+		self.addContent('</tbody></table>')				
 
 
 
