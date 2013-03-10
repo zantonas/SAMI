@@ -101,7 +101,7 @@ for line in f:
 tup = totalSpace()
 perctotal = int((tup[0]/tup[1]) *100)
 capalert = '-'
-perctotal = 76
+
 if perctotal >= int(settings[11]):
 	capalert='Capacity reached error threshhold. Capacity is at '+str(perctotal)+'%'
 elif perctotal >= int(settings[10]):
