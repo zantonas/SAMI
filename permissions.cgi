@@ -23,7 +23,10 @@ class Permissions(Page):
             <link rel="stylesheet" href="css/jquery.dataTables.css" media="screen">
             <script type="text/javascript">
                 $(function () {
-            $('#tenants').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});});</script>'''
+            $('#tenants').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
+			$('#usertable').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
+			$('#accesstable').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
+			});</script>'''
         
     def generate_tables(self):
 
@@ -104,8 +107,8 @@ class Permissions(Page):
 		####TENANT NAME
 		self.addContent('<h2>Tenant: '+tenlist[i].name+'</h2>')
                 userlist =  keystone.tenants.list_users(tenant=tenant_id)
-                self.addContent('<h3>Users:</h3>') 
-                self.addContent('<table border="1"><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Roles</th></tr>')
+                self.addContent('<div class="tablesection"><h3>Users:</h3>') 
+                self.addContent('<table id="usertable"><thead><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Roles</th></tr></thead><tbody>')
                 for i in range(len(userlist)):
                     self.addContent('<tr>')
                     self.addContent('<td>' + str(userlist[i].name) + '</td>')
@@ -126,12 +129,12 @@ class Permissions(Page):
 		    self.addContent('''<input type="submit" name="permissionsubmit" value="Revoke" /></form>''');
 
                     self.addContent('</td>')
-                self.addContent('</table><br>')
+                self.addContent('</tbody></table></div>')
 		
 		#############################
 		keyst_users = keystone.users.list()
-		self.addContent('<h3>Grant Access:</h3>')
-		self.addContent('<table border="1"><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Roles</th></tr>')
+		self.addContent('<div class="tablesection"><h3>Grant Access:</h3>')
+		self.addContent('<table id="accesstable"><thead><tr><th>Name</th><th>Email</th><th>Enabled</th><th>Roles</th></tr></thead><tbody>')
                 for i in range(len(keyst_users)):
                     self.addContent('<tr>')
                     self.addContent('<td>' + str(keyst_users[i].name) + '</td>')
@@ -150,6 +153,6 @@ class Permissions(Page):
                     	self.addContent('<option value="' + roles[x].id +'">' + roles[x].name + '</option>')
 		    self.addContent('''<input type="submit" name="permissionsubmit" value="Grant" /></form></td>''');
                     self.addContent('</tr>')
-                self.addContent('</table>')
+                self.addContent('</tbody></table></div>')
 
 Page = Permissions()

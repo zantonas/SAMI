@@ -81,14 +81,14 @@ class Users(Page):
 
 
 
-		self.addContent('<br><b>Add User:</b><br>')
+		self.addContent('<div class="tablesection"><h3>Add User:</h3>')
 		self.addContent('''<form action="users.cgi" method="post">
 				<b>Name: </b><input type="text" name="name" />
 				<b>Password: </b><input type="text" name="password" />
 				<b>Email: </b><input type="text" name="email" />
 				<b>Enabled: </b><input type="checkbox" name="enabled" value="true">
 				<input type="submit" name="bsubmit" value="Add User"/>
-				</form>''');
+				</form></div>''');
 
 
 Page = Users()

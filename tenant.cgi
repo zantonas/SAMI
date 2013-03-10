@@ -43,6 +43,9 @@ class Tenants(Page):
                     clear: both;
                      margin: 10px;
                 }
+				form {
+					float: left;
+				}
             </style>
             <script type="text/javascript">
                 $(function () {
@@ -96,7 +99,8 @@ class Tenants(Page):
                         }
                         if(errortxt != "") { $("#quotaerrortext").text(errortxt).show().fadeOut(3000); event.preventDefault();}
                     });
-                     $('#containertable').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
+					$('#tenanttable').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
+                    $('#containertable').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
                 } );
             </script>
         '''
@@ -151,7 +155,18 @@ class Tenants(Page):
         
 
         if tenant_id == None:
-            self.addContent('<table border="1"><tr><th>Name</th><th>ID</th><th>description</th><th>Enabled</th><th>Action</th></tr>')
+            self.addContent('''
+			<table id="tenanttable">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>ID</th>
+						<th>description</th>
+						<th>Enabled</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>''')
 
             for i in range(len(tenlist)):
                 self.addContent('<tr>')
@@ -168,16 +183,19 @@ class Tenants(Page):
                 self.addContent('<form action="tenant.cgi" method="post"> <button type="submit" name="deltensubmit" value="' + tenlist[i].id + '">Delete</button></form>  </td>')
                 self.addContent('</tr>')
             self.addContent('''
+							</tbody>
                             </table>
-                            <br>
-                            <b>Add Tenant:</b>
-                            <br>''')
-            self.addContent('''<form action="tenant.cgi" method="post">
-                        <b>Name: </b><input type="text" name="name" />
-                        <b>Description: </b><input type="text" name="description" />
-                        <b>Enabled: </b><input type="checkbox" name="enabled" value="true">
+							''')
+            self.addContent('''
+					<div id="addcontform">
+					<h2>Add Tenant:</h2>
+					<form action="tenant.cgi" method="post">
+                        Name: <input type="text" name="name" />
+                        Description: <input type="text" name="description" />
+                        Enabled: <input type="checkbox" name="enabled" value="true">
                         <input type="submit" name="addtensubmit" />
-                        </form>''')
+					</form>
+					</div>''')
 
         else:
             tenlist = keystone.tenants.list()
@@ -319,7 +337,7 @@ class Tenants(Page):
                 self.addContent('''
                                 <div id="addcontform">
                                     <h3>Add Container</h3>
-                                    <form action="tenant.cgi?tenant='''+tenant_id+'''" method="post">'
+                                    <form action="tenant.cgi?tenant='''+tenant_id+'''" method="post">
                                         <b>Container name: </b><input type="text" name="addcontname" />
                                         <input type="submit" name="addcontsubmit" />
                                     </form>
@@ -338,9 +356,9 @@ class Tenants(Page):
         quotas = ""
         for qtype in self.quota_types:
             meta = "x-container-meta-" + qtype
-            quotas += self.quota_types[qtype]
+            quotas += '<div class="data">' + self.quota_types[qtype]
             if meta in headers:
-                quotas += ": " + headers[meta]
+                quotas += ": " + headers[meta] + "</div>"
                 quotas += '''
                     <form id="removequotaform" action="tenant.cgi?tenant='''+tenant_id+'''" method="post">
                         <input type="hidden" name="modcontname" value="'''+container+'''"/>
@@ -348,7 +366,7 @@ class Tenants(Page):
                         <input type="submit" value="Remove" />
                     </form>'''
             else:
-                quotas += ": Not Set"
+                quotas += ": Not Set</div>"
             quotas += "<br/>"
         return quotas
                 
@@ -363,7 +381,7 @@ class Tenants(Page):
                         <input type="hidden" name="delpolicytype" value="'''+policy_type+'''"/>
                         <input type="submit" value="Remove" />
                     </form>'''
-                policies += policy_type + ": " + headers[meta] + removeform
+                policies += '<div class="data">' + policy_type + ': ' + headers[meta] + '</div>' + removeform
         if policies == "": policies = "No Policies"
         return policies
 
