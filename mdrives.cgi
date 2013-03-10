@@ -3,7 +3,7 @@ from components import Page
 import cgi
 import json
 import os
-from  pcap import fetchDrivesInBuilder
+import pcap
 
 class mdrives(Page):
         name = "Drive management"
@@ -14,13 +14,36 @@ class mdrives(Page):
                 Page.__init__(self)
 
 	def listDrives(self):
+		object_drive = pcap.drivesInBuilder("object")
+		account_drive = pcap.drivesInBuilder("account")
+		container_drive = pcap.drivesInBuilder("container")
 		return '''
-		<b>Object Server</b> <br />
-		''' + str(fetchDrivesInBuilder('object')) + ''' <br /><br />
-		<b>Account Server</b> <br />
-		''' + str(fetchDrivesInBuilder('account')) + ''' <br /><br />
-		<b>Container Server</b> <br />
-		''' + str(fetchDrivesInBuilder('container'))
+		<b>Object Server</b> <br /> ''' + self.generateTables(object_drive) + '''
+		<b>Account Server</b> <br /> ''' + self.generateTables(account_drive) + '''
+		<b>Container Server</b> <br /> ''' + self.generateTables(container_drive)
+
+	def generateTables(self, drive):
+		table_rows = ""
+                for d in drive:
+                        table_rows = table_rows + '''
+                                <tr>
+                                        <td>%(zone)s</td>
+                                        <td>%(ip address)s</td>
+                                        <td>%(port)s</td>
+                                        <td>
+                                                <button type="button">Delete</button>
+                                        </td>
+                                </tr>''' % d
+                return '''
+		<table border="1">
+                        <tr>
+                                <th>Zone</th>
+                                <th>IP</th>
+                                <th>Port</th>
+                                <th>Delete</th>
+                        </tr>
+                ''' +  table_rows + ''' </table><br /><br />'''
+
 	def inputForm(self):
 		return ''' <hr/> <b> ADD DRIVE </b><br />
 		<form action="addDrive.cgi" method="get" target="_blank">
