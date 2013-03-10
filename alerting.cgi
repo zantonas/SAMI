@@ -17,14 +17,14 @@ class Alerting(Page):
 			return
 		alerts = []
 	        for line in f:
-       	            	alerts.append(line)
+       	            	alerts.append(line.rstrip())
 
-                if (alerts[0]== '\n') and (alerts[1] == '{}'):
+                if (alerts[0]== '-') and (alerts[1] == '{}') and (alerts[2] == '-'):
                        	self.addContent('No issues detected. Cluster is OK.')
                 else:
                        	self.addContent('Openstack Swift Alert!<br><br>')
 
-                if alerts[0] != '\n':
+                if alerts[0] != '-':
                        	unpingable_nodes = alerts[0].split(',')
                        	self.addContent('Node issues detected!<br>The following Nodes are unpingable:<br><br>')
                        	self.addContent('<table border=1><th>Node IP</th>')
@@ -38,7 +38,9 @@ class Alerting(Page):
                        	for ip in unmounted_drives:
                                	for x in range(len(unmounted_drives[ip])):
                                        	self.addContent('<tr><td>' + ip + '</td><td>' + unmounted_drives[ip][x]['device'] + '</td><tr>')
-                        self.addContent('</table>')
+                        self.addContent('</table><br>')
+		if alerts[2] != '-':
+			self.addContent('<b>'+alerts[2]+'<b>')
 
 page = Alerting()
 

@@ -7,6 +7,8 @@ from swift.common.ring.ring import Ring
 from swift.common.ring.ring import RingData
 import os
 
+from pcap import totalSpace
+
 #FORMAT: [key=ip][port]
 diskips = dict()
 
@@ -90,12 +92,32 @@ for storagenode in diskips:
                 except:
                                 nodes_unpingable.append(storagenode)
 
+#check total capacity
+f = open("settings.conf", "r")
+settings = []
+for line in f:
+    	settings.append(line.split('\n')[0])
+
+tup = totalSpace()
+perctotal = int((tup[0]/tup[1]) *100)
+capalert = '-'
+perctotal = 76
+if perctotal >= int(settings[11]):
+	capalert='Capacity reached error threshhold. Capacity is at '+str(perctotal)+'%'
+elif perctotal >= int(settings[10]):
+	capalert='Capacity reached warning threshhold. Capacity is at '+str(perctotal)+'%'
+
+#create dat
 if not os.path.exists('/alerting.dat'):
 	os.makedirs('/alerting.dat')
 f = open('alerting.dat', 'w+')
 f.seek(0)
-f.write(','.join(nodes_unpingable) + '\n')
+if not nodes_unpingable:
+	f.write('-\n')
+else:
+	f.write(','.join(nodes_unpingable)+'\n')
 drives = ast.literal_eval(json.dumps(unmounted_drives))
-f.write(str(drives))
+f.write(str(drives)+ '\n')
+f.write(str(capalert))
 f.close()
 

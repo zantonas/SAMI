@@ -12,16 +12,15 @@ except:
 	quit()	
 alerts = []
 for line in f:
-        alerts.append(line)
-
+        alerts.append(line.rstrip())
 
 message = ''
-if (alerts[0] == '\n') and (alerts[1] == '{}'):
+if (alerts[0] == '-') and (alerts[1] == '{}') and (alerts[2] == '-'):
         pass
 else:
         message+='Openstack Swift Alert!\n\n'
 
-if alerts[0] != '\n':
+if alerts[0] != '-':
         unpingable_nodes = alerts[0].split(',')
         message+='Node issues detected!\nThe following Nodes are unpingable:\n\n'
         for ip in range(len(unpingable_nodes)):
@@ -32,6 +31,9 @@ if alerts[1] != '{}':
         for ip in unmounted_drives:
                 for x in range(len(unmounted_drives[ip])):
                         message+= ip + ' --- ' + unmounted_drives[ip][x]['device'] + '\n'
+
+if alerts[2] != '-':
+	message+=alerts[2] + '\n'
 
 if message == '':
         print "No errors detected. Cluster is OK"
