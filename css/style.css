@@ -153,3 +153,11 @@ table.dataTable td {
 	cursor: pointer;
 }
 
+.data {
+float: left;
+}
+
+.tablesection {
+clear: both;
+margin-bottom: 30px;
+}
