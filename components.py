@@ -27,7 +27,7 @@ class Page():
 		<div class=\"main\">
 		<div class=\"header\">
 		<div class="logo">
-			<a href="/"><img src=\"./openstack.jpg\" /></a></br>
+			<a href="."><img src=\"./openstack.jpg\" /></a></br>
 			SAMI
 		</div>
 		<div id="title">

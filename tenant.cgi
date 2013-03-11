@@ -311,7 +311,7 @@ class Tenants(Page):
                                     <option value="UNMODIFIED">Unmodified</option>
                                     <option value="FIXED">Fixed</option>
                                 </select></div>
-                                <div>Duration: <input name="expiryduration" id="expiryduration" type="textbox"/></div>
+                                <div>Duration: <input name="expiryduration" id="expiryduration" type="textbox" size="5"/> Seconds</div>
                                 <div><input class="setpolicy" type="submit" value="Set Policy"/>
                                 <input class="cancelpolicy" type="button" value="Cancel"/></div>
                             </form>
