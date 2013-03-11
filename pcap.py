@@ -112,7 +112,7 @@ def allZonedDrives():
 				drives_dict[zone] = builder[zone]
 			else:
 				for dev in builder[zone]:
-					unique_drives = filter(lambda x: x["ip address"] != dev["ip address"] ,drives_dict[zone])
+					unique_drives = filter(lambda x: (x["ip address"] + x["name"]) != (dev["ip address"] + dev["name"]) ,drives_dict[zone])
 					if len(unique_drives) != 0:
 						drives_dict[zone].append(unique_drives)
 	return drives_dict
