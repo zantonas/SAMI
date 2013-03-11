@@ -40,11 +40,17 @@ if message == '':
 else:
         print message
         #Creds
-        smtpuser = '[INPUT_USER_EMAIL]'
-        smtppass = '[INPUT_USER_PASS]'
 
-        server = smtplib.SMTP('smtp.gmail.com',587)
-        recipients = ['[RECIPIENT_EMAIL]', '[RECIPIENT_EMAIL]']
+	f = open("settings.conf", "r")
+        settings = []
+        for line in f:
+                settings.append(line.split('\n')[0])
+
+        smtpuser = settings[12]
+        smtppass = settings[13]
+
+        server = smtplib.SMTP(settings[14],587)
+        recipients = settings[15].split(',')
         msg = MIMEText(message)
         msg['Subject'] = "OpenStack Swift Alert!"
         msg['From'] = smtpuser
