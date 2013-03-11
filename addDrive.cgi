@@ -29,28 +29,31 @@ class AddDrive(Page):
 
 	def addDrive(self, dev):
 		if dev["objserver"] == "true":
-			cmd = "swift-ring-builder /etc/swift/object.builder add " + str(self.formatDev(dev)) + dev["weight"]
+			cmd = "swift-ring-builder /etc/swift/object.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
 			procobj = os.popen(cmd)
 			processedobj = procobj.read()
 			procobj.close()
-			self.addContent(processedobj)
+			self.addContent(processedobj + cmd )
 
 		if dev["accserver"] == "true":
-                        cmdacc = "swift-ring-builder /etc/swift/account.builder add " + str(self.formatDev(dev)) + dev["weight"]
+                        cmdacc = "swift-ring-builder /etc/swift/account.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
                         procacc = os.popen(cmdacc)
                         processedacc = procacc.read()
                         procacc.close()
                         self.addContent(processedacc)
 
 		if dev["contserver"] == "true":
-                        cmdcont = "swift-ring-builder /etc/swift/container.builder add " + str(self.formatDev(dev)) + dev["weight"]
+                        cmdcont = "swift-ring-builder /etc/swift/container.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
                         proccont = os.popen(cmdcont)
                         processedcont = proccont.read()
                         proccont.close()
                         self.addContent(processedcont)
 
 	def formatDev(self, dev):
-		return 'z%(zone)s-%(ip)s:%(port)s/%(device)s_"%(meta)s"' % dev
+		if dev["meta"] != None:
+			return 'z%(zone)s-%(ip)s:%(port)s/%(device)s_"%(meta)s"' % dev
+		else:
+			return 'z%(zone)s-%(ip)s:%(port)s/%(device)s' % dev
 
 class Drive:
 	def __init__(self, data):

@@ -38,10 +38,10 @@ def fetchDrives(zone):
 		return '[{}]'
 
 def rebalance(builder):
-	val = subprocess.call(["/usr/bin/swift-ring-builder", "/etc/swift/" + builder + ".builder", "rebalance"], stdout=open(os.devnull, 'wb'))
+	val = subprocess.call(["sudo", "/usr/bin/swift-ring-builder", "/etc/swift/" + builder + ".builder", "rebalance"], stdout=open(os.devnull, 'wb'))
         if (str(val) == '2'): #If it's a permissions error, chmod
 		os.system("sudo /bin/chmod 710 /etc/swift/")
-		return subprocess.call(["/usr/bin/swift-ring-builder", "/etc/swift/" + builder + ".builder", "rebalance"])
+		return subprocess.call(["sudo", "/usr/bin/swift-ring-builder", "/etc/swift/" + builder + ".builder", "rebalance"])
 	return val
 
 #Returns a dict for a particular drive via swift recon.
@@ -70,7 +70,7 @@ def totalSpace():
 
 
 def removeDrive(builder, ip, device):
-	args = ["/usr/bin/swift-ring-builder", "/etc/swift/" + builder + ".builder", "remove"]
+	args = ["sudo", "/usr/bin/swift-ring-builder", "/etc/swift/" + builder + ".builder", "remove"]
 	if device != "":
 		args.append(ip + "/" + device)
 	else:
@@ -133,7 +133,7 @@ def allUniqueDrives():
 #Returns a list of drives usign the swift-ring-builder
 def drivesInBuilder(builder):
 	try:
-		output = subprocess.check_output(["/usr/bin/swift-ring-builder", "/etc/swift/" + builder + ".builder"])
+		output = subprocess.check_output(["sudo", "/usr/bin/swift-ring-builder", "/etc/swift/" + builder + ".builder"])
 		output_list = output.split('\n') #Break the output into a list seperated by new lines
 
 		#Header related stuff#

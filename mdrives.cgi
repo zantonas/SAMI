@@ -9,18 +9,28 @@ class mdrives(Page):
         name = "Drive management"
 
         def __init__(self):
+		self.runPyFunc(cgi.FieldStorage())
 		self.addContent(self.listDrives())
 		self.addContent(self.inputForm())
-		self.addContent(str(self.runPyFunc(cgi.FieldStorage())))
                 Page.__init__(self)
 	
 	def runPyFunc(self, args):
 		if "pyFunc" in args:
 			py_func = args["pyFunc"].value.split("_")
 			if py_func[0] == "delete":
-				return pcap.removeDrive(py_func[1], py_func[2], py_func[3])
+				retval = pcap.removeDrive(py_func[1], py_func[2], py_func[3])
+				if retval == 0:
+					self.addContent("Device " + str(py_func[2] ) + "/" + str(py_func[3]) + " has been marked for removal. Please rebalance for the changes to take effect<br/>")
+				else:
+					self.addContent("Something may have gone wrong. Perhaps rebanace the " + str(py_func[1]) + " server.<br/>")
+				return retval
 			if py_func[0] == "rebalance":
-				return pcap.rebalance(py_func[1])
+				retval =  pcap.rebalance(py_func[1])
+				if retval == 0:
+					self.addContent( str(py_func[1]) + " rebalanced successfully.<br/>")
+				else:
+					self.addContent("Too early to reballance " + str(py_func[1]) + "<br/>")
+				return retval
 		return ""
 
 	def listDrives(self):
