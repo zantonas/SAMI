@@ -2,17 +2,37 @@
 
 An openstack swift administrative management interface.
 
+## Prerequisites
+
+* A working Swift cluster.
+* A working Keystone Node.
+* A web server.
+
 ## Installation
 
 Unpack SAMI to your html directory.
 
 ## Configuration
 
-### Permissions
+### 1. Permissions
 
-Give your web server permissions to use SAMI.
+Give your web server permissions to access swift.
 
-### Initialize settings.conf
+#### Step 1
+
+Add the web server user to sudoers list.
+
+* sudo visudo
+
+#### Step 2
+
+Add the line:
+
+* [INSERT-WEB-SERVER-USER] ALL=(ALL) NOPASSWD: /bin/chmod 710 /etc/swift/, /usr/bin/swift-ring-builder
+
+For example, if you run apache, [INSERT-WEB-SERVER-USER] = www-data.
+
+### 2. Initialize settings.conf
 
 #### In order for SAMI to interact with Swift and Keystone, it must have the following parameters:
 
@@ -48,7 +68,7 @@ Give your web server permissions to use SAMI.
 * emailpass123
 * recipient1@email.com, recipient2@email.com
 
-### Start Cron Jobs
+### 3. Start Cron Jobs
 
 #### Step 1
 
