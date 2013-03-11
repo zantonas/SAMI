@@ -160,7 +160,6 @@ class Tenants(Page):
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>ID</th>
 						<th>description</th>
 						<th>Enabled</th>
 						<th>Action</th>
@@ -171,7 +170,7 @@ class Tenants(Page):
             for i in range(len(tenlist)):
                 self.addContent('<tr>')
                 self.addContent('<td>' + tenlist[i].name + '</td>')
-                self.addContent('<td>' + tenlist[i].id + '</td>')
+                #self.addContent('<td>' + tenlist[i].id + '</td>')
                 self.addContent('<td>' + str(tenlist[i].description) + '</td>')
                 if tenlist[i].enabled == True:
                     self.addContent('<td>True</td>')

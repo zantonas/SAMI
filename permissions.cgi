@@ -50,7 +50,6 @@ class Permissions(Page):
             <table id="tenants"><thead>
             <tr>
             <th>Name</th>
-            <th>ID</th>
             <th>description</th>
             <th>Enabled</th>
             <th>Modify</th>
@@ -59,7 +58,7 @@ class Permissions(Page):
             for i in range(len(tenlist)):
                 self.addContent('<tr>')
                 self.addContent('<td>' + tenlist[i].name + '</td>')
-                self.addContent('<td>' + tenlist[i].id + '</td>')
+                #self.addContent('<td>' + tenlist[i].id + '</td>')
                 self.addContent('<td>' + str(tenlist[i].description) + '</td>')
 		if tenlist[i].enabled != None:
 			self.addContent('<td>' + str(tenlist[i].enabled) + '</td>')
