@@ -25,12 +25,16 @@ Give your web server permissions to use SAMI.
 * USER-ROLE-NAME (The user role name)
 * CAPACITY-WARNING-THRESHHOLD (The % warning threshold to alert you)
 * CAPACITY-ERROR-THRESHOLD (The total cluster capacity % error threshold for alerting)
+* EMAIL-USER-ADDRESS (The email address to send email alerts from)
+* EMAIL-USER-PASSWORD (The email password)
+* EMAIL-SERVER (The mail server used to deal with requests)
+* EMAIL-ALERT-RECIPIENTS (The recipients to alert via email)
 
 #### Example settings.conf (Each bullet represents a line in the conf file):
 
 * DO NOT CHANGE THE FORMAT OF THIS FILE
 * Each line represents a value in the following format:
-* KEYSTONE-ADMIN-TOKEN, KEYSTONE-ENDPOINT, SUPER-USER, SUPER-USER-PASSWORD, ADMIN-ID, ADMIN-ROLE-ID, USER-ROLE-NAME, CAPACITY-WARNING-THRESHHOLD, CAPACITY-ERROR-THRESHOLD
+* KEYSTONE-ADMIN-TOKEN, KEYSTONE-ENDPOINT, SUPER-USER, SUPER-USER-PASSWORD, ADMIN-ID, ADMIN-ROLE-ID, USER-ROLE-NAME, CAPACITY-WARNING-THRESHHOLD, CAPACITY-ERROR-THRESHOLD, EMAIL-USER-ADDRESS, EMAIL-USER-PASSWORD, EMAIL-SERVER, EMAIL-ALERT-RECIPIENTS
 * ADMIN
 * http://10.27.121.15:35357/v2.0/
 * admin
@@ -40,6 +44,9 @@ Give your web server permissions to use SAMI.
 * swiftuser
 * 75
 * 85
+* nobody@gmail.com
+* emailpass123
+* recipient1@email.com, recipient2@email.com
 
 ### Start Cron Jobs
 
