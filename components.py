@@ -76,10 +76,14 @@ class Page():
 		print self.footer
 	
 	def auth_check(self):
+		f = open("settings.conf", "r")
+		settings = []
+		for line in f:
+        		settings.append(line.split('\n')[0])
 		if "HTTP_COOKIE" in os.environ:
 			try:
 				cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])["session"].value
-				if cookie == "swiftpassword":
+				if cookie == settings[5]+settings[6]:
 					return True
 				else:
 					return False

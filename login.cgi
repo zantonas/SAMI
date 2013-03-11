@@ -5,10 +5,15 @@ import cgi, cgitb
 print "Content-type: text/html"
 validated = False
 
+f = open("settings.conf", "r")
+settings = []
+for line in f:
+        settings.append(line.split('\n')[0])
+
 if "HTTP_COOKIE" in os.environ:
 	try:
 		cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])["session"].value
-		if cookie == "swiftpassword":
+		if cookie == settings[5]+settings[6]:
 			validated = True
 	except (Cookie.CookieError, KeyError):
 		pass
@@ -17,7 +22,7 @@ if not validated:
 	form = cgi.FieldStorage()
 	user = form.getvalue('user')
 	password = form.getvalue('password')
-	if user == "swift" and password == "password":
+	if user == str(settings[5]) and password == str(settings[6]):
 		expiration = datetime.datetime.now() + datetime.timedelta(days=30)
 		cookie = Cookie.SimpleCookie()
 		cookie["session"] = user+password
@@ -25,8 +30,7 @@ if not validated:
 		validated = True
 
 if validated:
-	print "Location: index.cgi"
-
+	print "Location: lcap.cgi"
 	
 print """
 	<html>
