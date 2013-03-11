@@ -9,11 +9,23 @@ class mdrives(Page):
         name = "Drive management"
 
         def __init__(self):
+		self.generate_header()
 		self.runPyFunc(cgi.FieldStorage())
 		self.addContent(self.listDrives())
 		self.addContent(self.inputForm())
                 Page.__init__(self)
 	
+	def generate_header(self):
+            self.headerresources += '''
+            <script src="js/jquery-1.9.0.min.js"></script>
+            <script src="js/jquery.dataTables.min.js"></script>
+            <link rel="stylesheet" href="css/jquery.dataTables.css" media="screen">
+	    <script type="text/javascript">
+                $(function () {
+            $('#account').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
+            $('#container').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});
+            $('#object').dataTable({"sPaginationType": "full_numbers", "aaSorting": []});});</script>'''
+
 	def runPyFunc(self, args):
 		if "pyFunc" in args:
 			py_func = args["pyFunc"].value.split("_")
@@ -38,9 +50,9 @@ class mdrives(Page):
 		account_drive = pcap.drivesInBuilder("account")
 		container_drive = pcap.drivesInBuilder("container")
 		return '''
-		<b>Object Server</b> <form method="post"><button name="pyFunc" value="rebalance_object" type="submit">Rebalance</button></form> <br /> ''' + self.generateTables(object_drive, "object") + '''
-		<b>Account Server</b> <form method="post"><button name="pyFunc" value="rebalance_account" type="submit">Rebalance</button></form> <br /> ''' + self.generateTables(account_drive, "account") + '''
-		<b>Container Server</b> <form method="post"><button name="pyFunc" value="rebalance_container" type="submit">Rebalance</button></form><br /> ''' + self.generateTables(container_drive, "container")
+		<div class="tablesection"><h3>Object Server</h3> <form method="post"><button name="pyFunc" value="rebalance_object" type="submit">Rebalance</button></form> <br /> ''' + self.generateTables(object_drive, "object") + '''
+		</div><div class="tablesection"><br><h3>Account Server</h3> <form method="post"><button name="pyFunc" value="rebalance_account" type="submit">Rebalance</button></form> <br /> ''' + self.generateTables(account_drive, "account") + '''
+		</div><div class="tablesection"><br><h3>Container Server</h3> <form method="post"><button name="pyFunc" value="rebalance_container" type="submit">Rebalance</button></form><br /> ''' + self.generateTables(container_drive, "container")
 
 	def generateTables(self, drive, builder):
 		table_rows = ""
@@ -58,7 +70,7 @@ class mdrives(Page):
                                         </form></td>
                                 </tr>''' % d
                 return '''
-		<table border="1">
+		<table id="'''+builder+'''"><thead>
                         <tr>
                                 <th>Zone</th>
                                 <th>IP</th>
@@ -67,11 +79,11 @@ class mdrives(Page):
 				<th>Weight</th>
 				<th>Balance</th>
                                 <th>Delete</th>
-                        </tr>
-                ''' +  table_rows + ''' </table><br /><br />'''
+                        </tr></thead><tbody>
+                ''' +  table_rows + ''' </tbody></table><br /><br />'''
 
 	def inputForm(self):
-		return ''' <hr/> <b> ADD DRIVE </b><br />
+		return ''' <hr/><div class="tablesection"><br><h3> ADD DRIVE </h3></div>
 		<form action="addDrive.cgi" method="get" target="_blank">
 		  
 			Weight: <input type="text" name="weight"><br>
