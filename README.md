@@ -2,6 +2,16 @@
 
 An openstack swift administrative management interface.
 
+* Logical capacity monitoring of accounts/containers.
+* Physical capacity monitoring of zones/drives.
+* User management.
+* Permissions management.
+* Account/container management.
+* Quota management.
+* Policy management.
+* Alerting and email alerting of capacity threshhold, node failures, and drive failures.
+* Drive/ring management.
+
 ## Prerequisites
 
 * A working Swift cluster.
