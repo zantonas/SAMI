@@ -7,7 +7,7 @@ from swift.common.ring.ring import RingData
 import json
 import os
 import cgi
-from  pcap import fetchDrivesInBuilder
+from  pcap import allZonedDrives
 
 class Pcap(Page):
 	name = "Physical Capacity"
@@ -27,8 +27,8 @@ class Pcap(Page):
                         self.addContent("<br/>Zone: " + str(zDrives[zone][0]['zone']))
                         for device in zDrives[zone]:
                                 #self.addContent("<br/> Device " + str(device['device']))
-				if device['ip'] not in reconData:
-                                	reconData[device['ip']] = json.loads(CallRecon(device['ip'], device['port']).establishConnection())
+				if device['ip address'] not in reconData:
+                                	reconData[device['ip address']] = json.loads(CallRecon(device['ip address'], device['port']).establishConnection())
 				for reconDevice in reconData:
 					#self.addContent("<br/>" + str(reconData[reconDevice]))
 					for dev in reconData[reconDevice]:
@@ -100,7 +100,7 @@ class Pcap(Page):
 			</div>''');
 	
 	def generate_tables(self):
-		zoned_devs = fetchDrivesInBuilder("object")
+		zoned_devs = allZonedDrives()
 		
 		total_capacity = 0
 		total_used = 0
@@ -132,7 +132,7 @@ class Pcap(Page):
 				if selected_zone == str(zone):
 					zonetablebody += '''
 							<tr>
-								<td>'''+device["ip"]+"/"+device["device"]+'''</td>
+								<td>'''+device["ip address"]+"/"+device["name"]+'''</td>
 								<td>'''+str(device["used"])+'''</td>
 								<td>'''+str(device["size"]-device["used"])+'''</td>
 								<td>'''+str(device["size"])+'''</td>
@@ -225,8 +225,8 @@ class Pcap(Page):
 					zoned_devs[iDev['zone']].append(iDev)
 				else:
 					zoned_devs[iDev['zone']] = [iDev]
-					if iDev['ip'] not in reconData:
-						reconData[iDev['ip']] = json.loads(CallRecon(iDev['ip'], iDev['port']).establishConnection())
+					if iDev['ip address'] not in reconData:
+						reconData[iDev['ip address']] = json.loads(CallRecon(iDev['ip address'], iDev['port']).establishConnection())
 						for reconDevice in reconData:
 								for dev in reconData[reconDevice]:
 										if dev['device'] == iDev['device']:
@@ -246,8 +246,8 @@ class Pcap(Page):
                                 zoned_devs[iDev['zone']].append(iDev)
                         else:
                                 zoned_devs[iDev['zone']] = [iDev]
-                                if iDev['ip'] not in reconData:
-                                        reconData[iDev['ip']] = json.loads(CallRecon(iDev['ip'], iDev['port']).establishConnection())
+                                if iDev['ip address'] not in reconData:
+                                        reconData[iDev['ip address']] = json.loads(CallRecon(iDev['ip address'], iDev['port']).establishConnection())
                                 for reconDevice in reconData:
                                         for dev in reconData[reconDevice]:
                                                 if dev['device'] == iDev['device']:

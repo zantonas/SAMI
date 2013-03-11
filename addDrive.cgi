@@ -20,37 +20,40 @@ class AddDrive(Page):
 			self.addContent("""
 				args missing<br/>
 				Please be sure to have included the following:<br/>
-				["weight", "zone", "ip", "port", "device", "meta"]<br/>
+				["weight", "zone", "ip", "port", "device"]<br/>
 				""")
 
 	def argsOK(self, args):
-		testAgainst = ["weight", "zone", "ip", "port", "device", "meta"] #List of vars we want
+		testAgainst = ["weight", "zone", "ip", "port", "device"] #List of vars we want
 		return set(testAgainst).issubset(args)
 
 	def addDrive(self, dev):
 		if dev["objserver"] == "true":
-			cmd = "swift-ring-builder /etc/swift/object.builder add " + str(self.formatDev(dev)) + " 100"
+			cmd = "swift-ring-builder /etc/swift/object.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
 			procobj = os.popen(cmd)
 			processedobj = procobj.read()
 			procobj.close()
-			self.addContent(processedobj + "<br/>" + cmd + "<br/>" )
+			self.addContent(processedobj + cmd )
 
 		if dev["accserver"] == "true":
-                        cmdacc = "swift-ring-builder /etc/swift/account.builder add " + str(self.formatDev(dev)) + " 100"
+                        cmdacc = "swift-ring-builder /etc/swift/account.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
                         procacc = os.popen(cmdacc)
                         processedacc = procacc.read()
                         procacc.close()
-                        self.addContent(processedacc + "<br/>" + cmdacc + "<br/>" )
+                        self.addContent(processedacc)
 
 		if dev["contserver"] == "true":
-                        cmdcont = "swift-ring-builder /etc/swift/container.builder add " + str(self.formatDev(dev)) + " 100"
+                        cmdcont = "swift-ring-builder /etc/swift/container.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
                         proccont = os.popen(cmdcont)
                         processedcont = proccont.read()
                         proccont.close()
-                        self.addContent(processedcont + "<br/>" + cmdcont + "<br/>" )
+                        self.addContent(processedcont)
 
 	def formatDev(self, dev):
-		return 'z%(zone)s-%(ip)s:%(port)s/%(device)s_"%(meta)s"' % dev
+		if dev["meta"] != None:
+			return 'z%(zone)s-%(ip)s:%(port)s/%(device)s_"%(meta)s"' % dev
+		else:
+			return 'z%(zone)s-%(ip)s:%(port)s/%(device)s' % dev
 
 class Drive:
 	def __init__(self, data):
