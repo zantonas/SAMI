@@ -1,0 +1,59 @@
+# SAMI
+
+An openstack swift administrative management interface.
+
+## Installation
+
+Unpack SAMI to your html directory.
+
+## Configuration
+
+### Permissions
+
+Give your web server permissions to use SAMI.
+
+### Initialize settings.conf
+
+#### In order for SAMI to interact with Swift and Keystone, it must have the following parameters:
+
+* KEYSTONE-ADMIN-TOKEN (The Keystone admin token)
+* KEYSTONE-ENDPOINT (The Keystone endpoint)
+* SUPER-USER (The admin user name, which was previously created in keystone)
+* SUPER-USER-PASSWORD (The admin user password)
+* ADMIN-ID (The admin id)
+* ADMIN-ROLE-ID (The admin role ID, which role-name must also be specified in swift)
+* USER-ROLE-NAME (The user role name)
+* CAPACITY-WARNING-THRESHHOLD (The % warning threshold to alert you)
+* CAPACITY-ERROR-THRESHOLD (The total cluster capacity % error threshold for alerting)
+
+#### Example settings.conf (Each bullet represents a line in the conf file):
+
+* DO NOT CHANGE THE FORMAT OF THIS FILE
+* Each line represents a value in the following format:
+* KEYSTONE-ADMIN-TOKEN, KEYSTONE-ENDPOINT, SUPER-USER, SUPER-USER-PASSWORD, ADMIN-ID, ADMIN-ROLE-ID, USER-ROLE-NAME, CAPACITY-WARNING-THRESHHOLD, CAPACITY-ERROR-THRESHOLD
+* ADMIN
+* http://10.27.121.15:35357/v2.0/
+* admin
+* secrete
+* 2170679e715a4b4095d0d45e92adbe7c
+* e456c93bcd924fb89847509144a9e77c
+* swiftuser
+* 75
+* 85
+
+### Start Cron Jobs
+
+#### Step 1
+
+Edit the sudo crontab file.
+
+* sudo crontab -e
+
+#### Step 2
+
+Set up the cron jobs (in this example, run hourly).
+
+* 0 * * * * /your-SAMI-location/alerting.py
+* 30 * * * * /your-SAMI-location/emailalerts.py
+
+Note that you should not run these jobs at the same time for performance reasons.
