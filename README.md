@@ -77,6 +77,7 @@ For example, if you run apache, [INSERT-WEB-SERVER-USER] = www-data.
 * 85
 * nobody@gmail.com
 * emailpass123
+* smtp.gmail.com
 * recipient1@email.com, recipient2@email.com
 
 ### 3. Start Cron Jobs
