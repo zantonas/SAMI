@@ -21,6 +21,7 @@ An openstack swift administrative management interface.
 ## Installation
 
 Unpack SAMI to your html directory.
+Note: SAMI must be installed on a proxy server.
 
 ## Configuration
 
