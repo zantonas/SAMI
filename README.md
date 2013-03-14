@@ -25,7 +25,13 @@ Note: SAMI must be installed on a proxy server.
 
 ## Configuration
 
-### 1. Permissions
+### 1. Set environment variables
+
+Export the absolute directory location of your SAMI folder to the variable 'SAMI_LOC'. For example:
+
+* export SAMI_LOC="/var/www/SAMI/"
+
+### 2. Permissions
 
 Give your web server permissions to access swift.
 
@@ -43,7 +49,7 @@ Add the line:
 
 For example, if you run apache, [INSERT-WEB-SERVER-USER] = www-data.
 
-### 2. Initialize settings.conf
+### 3. Initialize settings.conf
 
 #### In order for SAMI to interact with Swift and Keystone, it must have the following parameters:
 
@@ -80,7 +86,7 @@ For example, if you run apache, [INSERT-WEB-SERVER-USER] = www-data.
 * smtp.gmail.com
 * recipient1@email.com, recipient2@email.com
 
-### 3. Start Cron Jobs
+### 4. Start Cron Jobs
 
 #### Step 1
 
