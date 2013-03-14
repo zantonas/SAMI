@@ -3,10 +3,12 @@ import httplib
 import smtplib
 import json
 import ast
+import os
 from email.mime.text import MIMEText
 
+path = str(os.environ['SAMI_LOC'])
 try:
-	f = open("alerting.dat", "r")
+	f = open(path+"alerting.dat", "r")
 except:
 	print "Please wait for the data to be collected. This will only take a moment."
 	quit()	

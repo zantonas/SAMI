@@ -92,8 +92,9 @@ for storagenode in diskips:
                 except:
                                 nodes_unpingable.append(storagenode)
 
+path = str(os.environ['SAMI_LOC'])
 #check total capacity
-f = open("settings.conf", "r")
+f = open(path+"settings.conf", "r")
 settings = []
 for line in f:
     	settings.append(line.split('\n')[0])
@@ -108,9 +109,7 @@ elif perctotal >= int(settings[10]):
 	capalert='Capacity reached warning threshhold. Capacity is at '+str(perctotal)+'%'
 
 #create dat
-if not os.path.exists('/alerting.dat'):
-	os.makedirs('/alerting.dat')
-f = open('alerting.dat', 'w+')
+f = open(path+'alerting.dat', 'w+')
 f.seek(0)
 if not nodes_unpingable:
 	f.write('-\n')
