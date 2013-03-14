@@ -2,17 +2,54 @@
 
 An openstack swift administrative management interface.
 
+* Logical capacity monitoring of accounts/containers.
+* Physical capacity monitoring of zones/drives.
+* User management.
+* Permissions management.
+* Account/container management.
+* Quota management.
+* Policy management.
+* Alerting and email alerting of capacity threshhold, node failures, and drive failures.
+* Drive/ring management.
+
+## Prerequisites
+
+* A working Swift cluster.
+* A working Keystone Node.
+* A web server.
+
 ## Installation
 
 Unpack SAMI to your html directory.
+Note: SAMI must be installed on a proxy server.
 
 ## Configuration
 
-### Permissions
+### 1. Set environment variables
 
-Give your web server permissions to use SAMI.
+Export the absolute directory location of your SAMI folder to the variable 'SAMI_LOC'. For example:
 
-### Initialize settings.conf
+* export SAMI_LOC="/var/www/SAMI/"
+
+### 2. Permissions
+
+Give your web server permissions to access swift.
+
+#### Step 1
+
+Add the web server user to sudoers list.
+
+* sudo visudo
+
+#### Step 2
+
+Add the line:
+
+* [INSERT-WEB-SERVER-USER] ALL=(ALL) NOPASSWD: /bin/chmod 710 /etc/swift/, /usr/bin/swift-ring-builder
+
+For example, if you run apache, [INSERT-WEB-SERVER-USER] = www-data.
+
+### 3. Initialize settings.conf
 
 #### In order for SAMI to interact with Swift and Keystone, it must have the following parameters:
 
@@ -46,9 +83,10 @@ Give your web server permissions to use SAMI.
 * 85
 * nobody@gmail.com
 * emailpass123
+* smtp.gmail.com
 * recipient1@email.com, recipient2@email.com
 
-### Start Cron Jobs
+### 4. Start Cron Jobs
 
 #### Step 1
 
