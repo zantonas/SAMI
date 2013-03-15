@@ -4,11 +4,14 @@ import smtplib
 import json
 import ast
 import os
+import argparse
 from email.mime.text import MIMEText
 
-path = str(os.environ['SAMI_LOC'])
+parser = argparse.ArgumentParser(description='absolute_path_to_SAMI')
+parser.add_argument('SAMI_DIR', type=str)
+args=parser.parse_args()
 try:
-	f = open(path+"alerting.dat", "r")
+	f = open(args.SAMI_DIR+"alerting.dat", "r")
 except:
 	print "Please wait for the data to be collected. This will only take a moment."
 	quit()	
@@ -42,8 +45,7 @@ if message == '':
 else:
         print message
         #Creds
-
-	f = open("settings.conf", "r")
+	f = open(args.SAMI_DIR+"settings.conf", "r")
         settings = []
         for line in f:
                 settings.append(line.split('\n')[0])

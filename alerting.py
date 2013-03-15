@@ -6,7 +6,7 @@ import ast
 from swift.common.ring.ring import Ring
 from swift.common.ring.ring import RingData
 import os
-
+import argparse
 from pcap import totalSpace
 
 #FORMAT: [key=ip][port]
@@ -92,9 +92,12 @@ for storagenode in diskips:
                 except:
                                 nodes_unpingable.append(storagenode)
 
-path = str(os.environ['SAMI_LOC'])
+parser = argparse.ArgumentParser(description='absolute_path_to_SAMI')
+parser.add_argument('SAMI_DIR', type=str)
+args=parser.parse_args()
+
 #check total capacity
-f = open(path+"settings.conf", "r")
+f = open(args.SAMI_DIR+"settings.conf", "r")
 settings = []
 for line in f:
     	settings.append(line.split('\n')[0])
@@ -109,7 +112,7 @@ elif perctotal >= int(settings[10]):
 	capalert='Capacity reached warning threshhold. Capacity is at '+str(perctotal)+'%'
 
 #create dat
-f = open(path+'alerting.dat', 'w+')
+f = open(args.SAMI_DIR+'alerting.dat', 'w+')
 f.seek(0)
 if not nodes_unpingable:
 	f.write('-\n')
