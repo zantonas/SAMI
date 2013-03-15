@@ -28,27 +28,31 @@ class AddDrive(Page):
 		return set(testAgainst).issubset(args)
 
 	def addDrive(self, dev):
-		if dev["objserver"] == "true":
-			cmd = "swift-ring-builder /etc/swift/object.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
-			procobj = os.popen(cmd)
-			processedobj = procobj.read()
-			procobj.close()
-			self.addContent(processedobj + cmd )
+		try:
+			if dev["objserver"] == "true":
+				cmd = "sudo swift-ring-builder /etc/swift/object.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
+				procobj = os.popen(cmd)
+				processedobj = procobj.read()
+				procobj.close()
+				self.addContent(processedobj + cmd )
 
-		if dev["accserver"] == "true":
-                        cmdacc = "swift-ring-builder /etc/swift/account.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
-                        procacc = os.popen(cmdacc)
-                        processedacc = procacc.read()
-                        procacc.close()
-                        self.addContent(processedacc)
+			if dev["accserver"] == "true":
+        	                cmdacc = "sudo swift-ring-builder /etc/swift/account.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
+        	                procacc = os.popen(cmdacc)
+                        	processedacc = procacc.read()
+                        	procacc.close()
+	                        self.addContent(processedacc)
 
-		if dev["contserver"] == "true":
-                        cmdcont = "swift-ring-builder /etc/swift/container.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
-                        proccont = os.popen(cmdcont)
-                        processedcont = proccont.read()
-                        proccont.close()
-                        self.addContent(processedcont)
-
+			if dev["contserver"] == "true":
+                        	cmdcont = "sudo swift-ring-builder /etc/swift/container.builder add " + str(self.formatDev(dev)) + " " + dev["weight"]
+                        	proccont = os.popen(cmdcont)
+                        	processedcont = proccont.read()
+                        	proccont.close()
+                        	self.addContent(processedcont)
+		except:
+			pcap.chmod()
+			self.addDrive(dev)
+			
 	def formatDev(self, dev):
 		if dev["meta"] != None:
 			return 'z%(zone)s-%(ip)s:%(port)s/%(device)s_"%(meta)s"' % dev
