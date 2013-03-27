@@ -173,7 +173,7 @@ class Pcap(Page):
 			<h2>Zone: '''+str(selected_zone)+'''</h2>
 			<table id="zonetable">
 				<thead><tr>
-					<th>Zone</th>
+					<th>Device</th>
 					<th>Used</th>
 					<th>Free</th>
 					<th>Total</th>
